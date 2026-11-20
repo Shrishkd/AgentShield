@@ -76,6 +76,7 @@ def matches(event, policy):
 
 
 def detect(db, event, policy):
+    detected = []
     rules = list(matches(event, policy))
     if event.status == "error" and all(category in {"slow_span", "retry_limit"} for category, _, _ in rules):
         rules.append(("execution_error", "high", "The application reported error status."))
@@ -91,6 +92,8 @@ def detect(db, event, policy):
                            (incident_id, event.app_id, str(event.event_id), reason))
         if added.rowcount:
             db.execute("UPDATE incidents SET evidence_count=evidence_count+1 WHERE incident_id=?", (incident_id,))
+            detected.append((category, incident_id))
+    return detected
 
 
 DEFAULT_POLICY = Policy()

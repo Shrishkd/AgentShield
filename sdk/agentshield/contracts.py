@@ -8,7 +8,7 @@ Label = Annotated[str, Field(pattern=r"^[a-z][a-z0-9_.-]{0,63}$")]
 Status = Literal["ok", "error"]
 Kind = Literal["span_started", "span_finished", "validation", "check"]
 FLAGS = {"citation_supported", "citation_ids_valid", "has_citations", "claim_verified",
-         "schema_valid", "timed_out", "tool_exception", "citation_required"}
+         "schema_valid", "timed_out", "tool_exception", "citation_required", "restricted_action_blocked"}
 COUNTS = {"retrieved_count", "retry_count"}
 
 

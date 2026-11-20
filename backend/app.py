@@ -1,22 +1,24 @@
 import hashlib
+import asyncio
 import json
+import logging
 import os
 import secrets
 import sqlite3
 from contextlib import asynccontextmanager, closing, contextmanager
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, get_args
 from uuid import UUID
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from pydantic import AwareDatetime, Field
 
 from agentshield.contracts import Contract, Event, Registration, Status
-from backend import incidents
+from backend import incidents, investigation
 
 MAX_BYTES = 128 * 1024
 bearer = HTTPBearer(auto_error=False)
@@ -85,6 +87,12 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
     path = Path(db_path or os.getenv("AGENTSHIELD_DB", ".agentshield/events.sqlite3"))
     admin = admin_key or os.getenv("AGENTSHIELD_ADMIN_KEY")
     policies = incidents.load_policies(policy_path or os.getenv("AGENTSHIELD_POLICIES"))
+    model = os.getenv("AGENTSHIELD_RANK_MODEL", "")
+    if model not in {"", "llama3.2:1b", "llama3.2:3b"}:
+        raise ValueError("Choose a supported local llama3.2 rank model")
+    auto_categories = {v.strip() for v in os.getenv("AGENTSHIELD_AUTO_CATEGORIES","").split(",") if v.strip()}
+    if auto_categories.difference(get_args(incidents.Category)):
+        raise ValueError("Unknown automatic investigation category")
 
     @contextmanager
     def database():
@@ -110,7 +118,26 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
                 CREATE INDEX IF NOT EXISTS events_run ON events(app,run,timestamp);
             """)
             incidents.initialize(db, policies)
-        yield
+            investigation.initialize(db)
+        stop = asyncio.Event()
+        async def process_queue():
+            while not stop.is_set():
+                try:
+                    if await asyncio.to_thread(investigation.work_once, database, auto_categories, run_investigation):
+                        continue
+                except Exception:
+                    logging.getLogger(__name__).warning("Investigation worker deferred a pending job")
+                try:
+                    await asyncio.wait_for(stop.wait(), 1)
+                except TimeoutError:
+                    pass
+        worker = asyncio.create_task(process_queue()) if auto_categories else None
+        try:
+            yield
+        finally:
+            stop.set()
+            if worker:
+                await worker
 
     api = FastAPI(title="AgentShield", version="0.1.0", lifespan=lifespan)
     api.add_middleware(BodyLimit)
@@ -158,7 +185,8 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
                      event.timestamp.isoformat(timespec="microseconds"), payload))
                 if cursor.rowcount:
                     inserted += 1
-                    incidents.detect(db, event, policies.get(app, incidents.DEFAULT_POLICY))
+                    detected = incidents.detect(db, event, policies.get(app, incidents.DEFAULT_POLICY))
+                    investigation.enqueue(db, detected, auto_categories)
                 else:
                     existing, = db.execute("SELECT payload FROM events WHERE app=? AND id=?",
                                            (app, ident)).fetchone()
@@ -168,11 +196,11 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
 
     @api.get("/v1/events", response_model=list[ReceivedEvent])
     def events(app: str = Depends(application), run_id: UUID | None = None,
-               trace_id: UUID | None = None, status: Status | None = None,
+               trace_id: UUID | None = None, status: Status | None = None, event_id: UUID | None = None,
                limit: int = Query(100, ge=1, le=100), offset: int = Query(0, ge=0)):
         clauses = ["app=?"]
         params = [app]
-        for column, value in (("run", run_id), ("trace", trace_id), ("status", status)):
+        for column, value in (("run", run_id), ("trace", trace_id), ("status", status), ("id", event_id)):
             if value is not None:
                 clauses.append(column + "=?")
                 params.append(str(value))
@@ -242,6 +270,49 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
             if row is None:
                 raise HTTPException(404, "incident not found")
             return dict(row)
+
+    def run_investigation(incident_id, app):
+        with database() as db:
+            ident, token, snapshot, cached, attempt = investigation.acquire(db, app, str(incident_id), model)
+        if cached:
+            return cached
+        try:
+            if attempt > 2:
+                report = investigation.partial_report(ident, snapshot)
+            else:
+                try:
+                    from backend.investigation_graph import investigate
+                    checkpoints = path.with_name(path.name + ".checkpoints")
+                    report = asyncio.run(investigate(checkpoints, ident, snapshot, model))
+                except Exception as error:
+                    if attempt == 1:
+                        raise HTTPException(503, "graph interrupted; retry to resume",
+                                            headers={"Retry-After":"1"}) from error
+                    report = investigation.partial_report(ident, snapshot)
+            with database() as db:
+                updated = db.execute("UPDATE investigations SET report=?,owner=NULL,lease_until=0 WHERE id=? AND owner=?",
+                                     (report.model_dump_json(), ident, token))
+                if not updated.rowcount:
+                    raise HTTPException(409, "investigation lease expired")
+            return report
+        finally:
+            with database() as db:
+                db.execute("UPDATE investigations SET owner=NULL,lease_until=0 WHERE id=? AND owner=?", (ident, token))
+
+    @api.post("/v1/incidents/{incident_id}/investigate", response_model=investigation.Report)
+    def investigate_incident(incident_id: UUID, app: str = Depends(application)):
+        return run_investigation(incident_id, app)
+
+    @api.get("/v1/incidents/{incident_id}/report", response_model=investigation.Report)
+    def incident_report(incident_id: UUID, app: str = Depends(application), investigation_id: UUID | None = None):
+        with database() as db:
+            return investigation.read_report(db, app, str(incident_id), investigation_id)
+
+    @api.get("/v1/incidents/{incident_id}/report.md", response_class=PlainTextResponse)
+    def incident_markdown(incident_id: UUID, app: str = Depends(application), investigation_id: UUID | None = None):
+        with database() as db:
+            report = investigation.read_report(db, app, str(incident_id), investigation_id)
+        return PlainTextResponse(investigation.markdown(report), media_type="text/markdown")
 
     dist = Path(__file__).resolve().parents[1] / "frontend" / "dist"
     if (dist / "index.html").is_file():

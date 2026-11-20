@@ -1,5 +1,7 @@
 # AgentShield
 
+**Week 4 adds checkpointed LangGraph investigations.** Open an incident to investigate its evidence, inspect possible contributors, or download a Markdown report. The [Week 4 runbook](docs/week4.md) covers the demo, optional local Ollama ranking, operating limits and recovery.
+
 **Week 3 adds deterministic incidents and an incident explorer.** Run the seeded demo, configure per-app thresholds, or review the lifecycle API using the [week 3 runbook](docs/week3.md).
 
 **Week 2 adds the Advanced Hybrid RAG adapter and local React run explorer.** Build the UI before starting the collector. Follow the [week 2 runbook](integrations/hybrid_rag/README.md) for the live-model demo, real application launcher, tests and limitations.
@@ -68,4 +70,4 @@ Invoke-RestMethod "$base/v1/events?status=ok&limit=20" -Headers @{Authorization=
 - App credentials scope reads and writes. Exact retries are idempotent within an app. Reusing an ID with changed sanitized content rejects the whole batch. Reads support `run_id`, `trace_id`, `status`, `limit` and `offset` in timestamp and event-ID order.
 - A full queue or failed export drops telemetry. `emit_event()` returns whether the event was queued. Monitor `dropped` and the bounded `close()` result when completeness matters. Nested spans inherit context across asyncio tasks. The SDK has no disk spool or automatic retry. A hard process exit can lose queued data.
 - SQLite and loopback HTTP target a trusted local machine. Protect the database with OS permissions. Key rotation, retention and multi-user access management are future work. Use a single service process for this milestone.
-- The week 1 emitter runs without model calls. The week 2 RAG demo uses local Ollama models. Incident investigation, repair/replay and benchmarking remain later milestones.
+- The week 1 emitter runs without model calls. The week 2 RAG demo uses local Ollama models. The week 4 graph can investigate offline or use local Ollama to rank competing hypotheses. Repair, replay and benchmarking remain later milestones.

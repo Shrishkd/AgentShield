@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import './style.css';
+import Investigation from './Investigation';
 
 function useQuery(path, key, revision) {
   const [result, setResult] = useState({});
@@ -103,6 +104,7 @@ function Incidents({token}) {
        !detail.data ? <p>Loading evidence…</p> : <>
         <dl><dt>Incident</dt><dd>{active.incident_id}</dd><dt>Run</dt><dd>{active.run_id}</dd></dl>
         <p>{detail.data.incident.evidence_count} matching events · {active.status}</p>
+        <Investigation key={active.incident_id} incidentId={active.incident_id} token={token}/>
         {detail.data.evidence.map(({event,reason})=><article key={event.event_id}>
           <strong>{reason}</strong><Timeline events={[event]}/></article>)}
         <Pager offset={evidenceOffset} size={100} next={evidenceOffset+100<detail.data.incident.evidence_count}
