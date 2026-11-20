@@ -1,6 +1,6 @@
 # Adapter targets
 
-Week 1 used read-only source inspection. Neither application has emitted a verified AgentShield trace yet.
+Advanced Hybrid RAG now has a verified opt-in adapter and local model demo. MONDAY remains at source inspection. See the [RAG runbook](hybrid_rag/README.md).
 
 | Application | Existing boundaries | First integration check |
 | --- | --- | --- |

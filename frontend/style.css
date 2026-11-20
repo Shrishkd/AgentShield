@@ -1,0 +1,15 @@
+:root{font:16px/1.5 Inter,system-ui,sans-serif;color:#e7edf7;background:#101620;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0}header{padding:1rem 5vw;display:flex;align-items:center;gap:.65rem;background:#151e2a;border-bottom:1px solid #354052;font-weight:700}
+.mark{border:2px solid #6bddbd;border-radius:.4rem;color:#6bddbd;padding:0 .4rem}main{position:relative;max-width:90rem;margin:auto;padding:2rem 5vw}
+h1{font-size:clamp(2rem,4vw,3rem);letter-spacing:-.05em;margin:.1rem 0 1.35rem}h2{font-size:1.2rem;margin:0 0 1rem}
+section,form{background:#18222f;border:1px solid #364355;border-radius:.75rem;padding:1.3rem}
+form{max-width:35rem}form label{display:grid;gap:.5rem;margin-bottom:1rem}input,select,button{font:inherit;border:1px solid #536274;border-radius:.4rem;padding:.45rem .8rem;background:#192536;color:inherit}
+button{cursor:pointer}button:disabled{opacity:.45;cursor:default}button:hover:enabled,button:focus-visible{border-color:#6bddbd}.primary,.chosen{background:#15473f;border-color:#63ccaf}
+.toolbar,nav{display:flex;align-items:center;gap:.6rem}.toolbar{justify-content:space-between;margin-bottom:1rem}.toolbar select{margin-left:.5rem}
+.panels{display:grid;grid-template-columns:minmax(15rem,1fr) minmax(0,2fr);gap:1rem}.panels section{min-width:0}
+.disconnect{position:absolute;right:5vw;top:2.4rem}.run{width:100%;margin:.25rem 0;text-align:left;display:grid;grid-template-columns:1fr auto;gap:.3rem}
+small,time,p{color:#bdcad9}small{display:block;font-size:.85rem}.run small{grid-column:1/-1}.badge{font-size:.8rem;padding:.12rem .45rem;border-radius:.3rem;background:#204238;color:#9dedcc}.badge.error{background:#592e30;color:#ffbbac}
+nav{margin-top:1rem}ol{padding:0;list-style:none}.timeline li{display:grid;grid-template-columns:7rem 1fr;border-top:1px solid #394654;padding:.75rem 0;gap:.5rem}
+summary{cursor:pointer}code,dd{overflow-wrap:anywhere}time{font-size:.85rem}dt{color:#9fb3ca}dd{margin:0 0 .4rem;font-family:monospace}
+.track{display:block;position:relative;background:#2d3d50;height:4px;margin:.4rem 0;overflow:hidden}.track i{position:absolute;background:#72d5bb;height:100%;min-width:2px}
+@media(max-width:700px){.panels{grid-template-columns:1fr}.timeline li{grid-template-columns:1fr}.disconnect{position:static;margin-bottom:1rem}.toolbar{flex-wrap:wrap}}

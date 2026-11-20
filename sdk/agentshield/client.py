@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from contextvars import ContextVar
+from dataclasses import dataclass
 from queue import Empty, Full, Queue
 from threading import Event as Signal, Lock, Thread
 from time import monotonic
@@ -7,7 +8,12 @@ from uuid import UUID, uuid4
 
 import httpx
 
-from .contracts import Event
+from .contracts import Event, Status
+
+
+@dataclass
+class SpanOutcome:
+    status: Status = "ok"
 
 
 class Telemetry:
@@ -47,24 +53,41 @@ class Telemetry:
             return False
 
     @contextmanager
-    def span(self, operation: str):
+    def span(self, operation: str, *, record_start=False, attributes=None, outcome: SpanOutcome | None = None):
         """Time a sync or async block. Each outermost span starts a run."""
         parent = self._context.get()
         run, trace, parent_span = parent or (uuid4(), uuid4(), None)
         span_id = uuid4()
         token = self._context.set((run, trace, span_id))
         start = monotonic()
-        status = "ok"
+        result = outcome or SpanOutcome()
+        fields = dict(operation=operation, run_id=run, trace_id=trace, span_id=span_id,
+                      parent_span_id=parent_span)
         try:
+            if record_start:
+                self.emit_event(**fields, event_type="span_started", status="ok")
             yield span_id
         except BaseException:
-            status = "error"
+            result.status = "error"
             raise
         finally:
             self._context.reset(token)
-            self.emit_event(operation=operation, run_id=run, trace_id=trace, span_id=span_id,
-                            parent_span_id=parent_span, event_type="span_finished",
-                            status=status, duration_ms=(monotonic() - start) * 1000)
+            self.emit_event(**fields, event_type="span_finished", status=result.status,
+                            attributes=attributes or {}, duration_ms=(monotonic() - start) * 1000)
+
+    @property
+    def current_run_id(self) -> UUID | None:
+        context = self._context.get()
+        return context[0] if context else None
+
+    def record_check(self, operation, status, attributes):
+        context = self._context.get()
+        if context is None:
+            return False
+        run, trace, span_id = context
+        return self.emit_event(operation=operation, run_id=run, trace_id=trace, span_id=uuid4(),
+                               parent_span_id=span_id, event_type="validation", status=status,
+                               attributes=attributes)
 
     def _export(self):
         with httpx.Client(timeout=1.0, trust_env=False) as client:

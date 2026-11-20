@@ -6,8 +6,8 @@ from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validato
 
 Label = Annotated[str, Field(pattern=r"^[a-z][a-z0-9_.-]{0,63}$")]
 Status = Literal["ok", "error"]
-Kind = Literal["span_finished", "validation", "check"]
-FLAGS = {"citation_supported", "claim_verified", "schema_valid"}
+Kind = Literal["span_started", "span_finished", "validation", "check"]
+FLAGS = {"citation_supported", "citation_ids_valid", "has_citations", "claim_verified", "schema_valid"}
 COUNTS = {"retrieved_count", "retry_count"}
 
 

@@ -43,6 +43,25 @@ def test_permissions(service, record, tmp_path):
         assert len(key_hash) == 32 and key_hash != a["Authorization"][7:].encode()
 
 
+def test_run_queries_scope_pagination_and_error_filter(service, record):
+    owner, second = register(service), register(service, "another")
+    run_id = record["run_id"]
+    error = {**record, "event_id": str(uuid4()), "status": "error", "timestamp": "2026-12-01T10:00:00Z"}
+    clean = {**record, "event_id": str(uuid4()), "run_id": str(uuid4())}
+    assert service.post("/v1/events", headers=owner, json={"events": [record, error, clean]}).is_success
+    path = "/v1/runs/" + run_id
+    runs = service.get("/v1/runs?status=error", headers=owner).json()
+    assert [(r["run_id"], r["event_count"], r["status"]) for r in runs] == [(run_id, 2, "error")]
+    assert service.get("/v1/runs?status=ok", headers=owner).json()[0]["run_id"] == clean["run_id"]
+    first = service.get(path + "?limit=1", headers=owner).json()
+    next_page = service.get(path + "?limit=1&offset=1", headers=owner).json()
+    assert first["run"] == next_page["run"] == runs[0]
+    assert {first["events"][0]["event_id"], next_page["events"][0]["event_id"]} == {record["event_id"], error["event_id"]}
+    assert service.get("/v1/runs", headers=second).json() == []
+    assert service.get(path, headers=second).status_code == 404
+    assert service.get(path).status_code == 401
+
+
 def test_immutable_atomic_batch(service, record, tmp_path):
     headers = register(service)
     post = lambda events: service.post("/v1/events", headers=headers, json={"events": events})

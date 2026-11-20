@@ -12,6 +12,7 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.staticfiles import StaticFiles
 from pydantic import AwareDatetime, Field
 
 from agentshield.contracts import Contract, Event, Registration, Status
@@ -28,6 +29,18 @@ class ReceivedEvent(Event):
 
 class EventBatch(Contract):
     events: list[ReceivedEvent] = Field(min_length=1, max_length=100)
+
+
+class RunSummary(Contract):
+    run_id: UUID
+    last_event_at: AwareDatetime
+    event_count: int
+    status: Status
+
+
+class RunPage(Contract):
+    run: RunSummary
+    events: list[ReceivedEvent]
 
 
 class BodyLimit:
@@ -162,4 +175,43 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None) -> Fas
                               (*params, limit, offset))
             return [json.loads(payload) for payload, in rows]
 
+    summaries = """
+        SELECT run, max(timestamp), count(*),
+               CASE WHEN max(status='error') THEN 'error' ELSE 'ok' END AS observed_status
+        FROM events WHERE app=?
+    """
+
+    def summary(row):
+        return RunSummary(run_id=row[0], last_event_at=row[1], event_count=row[2], status=row[3])
+
+    @api.get("/v1/runs", response_model=list[RunSummary])
+    def runs(app: str = Depends(application), status: Status | None = None,
+             limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)):
+        query = summaries + " GROUP BY run"
+        params = [app]
+        if status:
+            query += " HAVING observed_status=?"
+            params.append(status)
+        with database() as db:
+            rows = db.execute(query + " ORDER BY max(timestamp) DESC, run LIMIT ? OFFSET ?",
+                              (*params, limit, offset))
+            return [summary(row) for row in rows]
+
+    @api.get("/v1/runs/{run_id}", response_model=RunPage)
+    def run_detail(run_id: UUID, app: str = Depends(application),
+                   limit: int = Query(100, ge=1, le=100), offset: int = Query(0, ge=0)):
+        with database() as db:
+            db.execute("BEGIN")
+            params = (app, str(run_id))
+            row = db.execute(summaries + " AND run=? GROUP BY run", params).fetchone()
+            if row is None:
+                raise HTTPException(404, "run not found")
+            records = db.execute(
+                "SELECT payload FROM events WHERE app=? AND run=? ORDER BY timestamp,id LIMIT ? OFFSET ?",
+                (*params, limit, offset))
+            return {"run": summary(row), "events": [json.loads(payload) for payload, in records]}
+
+    dist = Path(__file__).resolve().parents[1] / "frontend" / "dist"
+    if (dist / "index.html").is_file():
+        api.mount("/explorer", StaticFiles(directory=dist, html=True), name="explorer")
     return api

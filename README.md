@@ -1,5 +1,7 @@
 # AgentShield
 
+**Week 2 adds the Advanced Hybrid RAG adapter and local React run explorer.** Build the UI before starting the collector. Follow the [week 2 runbook](integrations/hybrid_rag/README.md) for the live-model demo, real application launcher, tests and limitations.
+
 Week 1 implements local telemetry ingestion. A Python application records spans or individual checks. The SDK validates and redacts events, puts them in a bounded queue, and exports batches on a background thread. FastAPI authenticates each application and stores its sanitized events in SQLite. An application can read its own events by run, trace and status.
 
 | Directory | Responsibility |
@@ -7,8 +9,8 @@ Week 1 implements local telemetry ingestion. A Python application records spans 
 | `sdk/agentshield` | Installable Python SDK, event contract, redaction and exporter |
 | `backend` | Local service, app credentials and immutable event storage |
 | `tests`, `examples` | Contract and failure-path tests, live synthetic demo |
-| `integrations` | Source locations and acceptance checks for future adapters |
-| `frontend`, `evals` | Reserved for the dashboard and labelled benchmark |
+| `integrations` | Advanced Hybrid RAG adapter and MONDAY integration notes |
+| `frontend`, `evals` | React run explorer and reserved benchmark directory |
 
 ## Run the week 1 acceptance check
 
@@ -64,4 +66,4 @@ Invoke-RestMethod "$base/v1/events?status=ok&limit=20" -Headers @{Authorization=
 - App credentials scope reads and writes. Exact retries are idempotent within an app. Reusing an ID with changed sanitized content rejects the whole batch. Reads support `run_id`, `trace_id`, `status`, `limit` and `offset` in timestamp and event-ID order.
 - A full queue or failed export drops telemetry. `emit_event()` returns whether the event was queued. Monitor `dropped` and the bounded `close()` result when completeness matters. Nested spans inherit context across asyncio tasks. The SDK has no disk spool or automatic retry. A hard process exit can lose queued data.
 - SQLite and loopback HTTP target a trusted local machine. Protect the database with OS permissions. Key rotation, retention and multi-user access management are future work. Use a single service process for this milestone.
-- The service provides event chronology. Real application adapters, incident agents, repair/replay, dashboard and benchmark remain later milestones. Week 1 grants no agent tools and performs no model calls, job submissions, email, finance or deployment actions.
+- The week 1 emitter runs without model calls. The week 2 RAG demo uses local Ollama models. Incident investigation, repair/replay and benchmarking remain later milestones.

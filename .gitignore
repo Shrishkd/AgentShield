@@ -5,3 +5,5 @@ __pycache__/
 .agentshield/
 .env
 build/
+node_modules/
+frontend/dist/
