@@ -66,11 +66,58 @@ function Workspace({token}) {
           next={eventOffset+100<detail.data.run.event_count} move={eventPage}/></>}</>}</section></div></>;
 }
 
+const categories = ['invalid_schema','timeout','tool_exception','verification_failed','missing_citation',
+  'invalid_citation','slow_span','retry_limit','execution_error'];
+
+function Incidents({token}) {
+  const [filters, setFilters] = useState({status:'', severity:'', category:''});
+  const [offset, page] = useState(0);
+  const [selected, select] = useState(null);
+  const [evidenceOffset, evidencePage] = useState(0);
+  const [revision, refresh] = useState(0);
+  const params = new URLSearchParams({offset, limit:21});
+  for (const [name,value] of Object.entries(filters)) if (value) params.set(name,value);
+  const list = useQuery('/v1/incidents?'+params, token, revision);
+  const visible = list.data?.slice(0,20) || [];
+  const active = visible.find(i=>i.incident_id===selected) || visible[0];
+  const detail = useQuery(active && '/v1/incidents/'+active.incident_id+'?offset='+evidenceOffset,
+                          token, revision);
+  const choices = {status:['open','acknowledged','resolved'], severity:['medium','high'], category:categories};
+  function reset() {select(null); evidencePage(0);}
+  return <><section className="toolbar incident-filters">{Object.entries(choices).map(([name,options])=>
+    <label key={name}>{name} <select value={filters[name]} onChange={e=>{
+      setFilters({...filters,[name]:e.target.value}); page(0); reset();
+    }}><option value="">All</option>{options.map(value=><option key={value} value={value}>
+      {value.replaceAll('_',' ')}</option>)}</select></label>)}
+    <button onClick={()=>{refresh(revision+1); evidencePage(0);}}>Refresh</button></section>
+    <div className="panels"><section><h2>Incidents</h2>
+      {list.error ? <p role="alert">{list.error}</p> : !list.data ? <p>Loading incidents…</p> :
+       !visible.length ? <p>No matching incidents.</p> : visible.map(i=>
+        <button key={i.incident_id} className={'run '+(active===i?'chosen':'')} aria-pressed={active===i}
+          onClick={()=>{select(i.incident_id); evidencePage(0);}}>
+          <strong>{i.category.replaceAll('_',' ')}</strong><span className="badge error">{i.severity}</span>
+          <small>{i.status} · {new Date(i.last_seen).toLocaleString()} · {i.app_id}</small></button>)}
+      <Pager offset={offset} size={20} next={list.data?.length>20} move={n=>{page(n);reset();}}/>
+    </section><section><h2>Incident evidence</h2>
+      {!active ? <p>Select an incident to inspect its evidence.</p> : detail.error ? <p role="alert">{detail.error}</p> :
+       !detail.data ? <p>Loading evidence…</p> : <>
+        <dl><dt>Incident</dt><dd>{active.incident_id}</dd><dt>Run</dt><dd>{active.run_id}</dd></dl>
+        <p>{detail.data.incident.evidence_count} matching events · {active.status}</p>
+        {detail.data.evidence.map(({event,reason})=><article key={event.event_id}>
+          <strong>{reason}</strong><Timeline events={[event]}/></article>)}
+        <Pager offset={evidenceOffset} size={100} next={evidenceOffset+100<detail.data.incident.evidence_count}
+          move={evidencePage}/></>}
+    </section></div></>;
+}
+
 function App() {
   const [token, connect] = useState('');
+  const [view, setView] = useState('Runs');
   return <><header><span className="mark" aria-hidden="true">A</span> AgentShield</header><main>
-    <h1>Run explorer</h1>{token ? <><button className="disconnect" onClick={()=>connect('')}>Disconnect</button>
-      <Workspace token={token}/></> :
+    <h1>{view==='Runs'?'Run explorer':'Incident explorer'}</h1>{token ? <><button className="disconnect" onClick={()=>{connect('');setView('Runs');}}>Disconnect</button>
+      <nav className="sections" aria-label="Explorer">{['Runs','Incidents'].map(name=>
+        <button key={name} aria-pressed={view===name} onClick={()=>setView(name)}>{name}</button>)}</nav>
+      {view==='Runs'?<Workspace token={token}/>:<Incidents token={token}/>}</> :
       <form onSubmit={e=>{e.preventDefault(); connect(e.currentTarget.elements.key.value.trim());}}>
         <label>Application key<input type="password" name="key" autoComplete="off" required/></label>
         <button className="primary">Connect</button><p>The key stays in memory until you disconnect or reload.</p></form>}</main></>;

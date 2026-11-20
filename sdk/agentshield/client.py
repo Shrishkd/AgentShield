@@ -53,7 +53,8 @@ class Telemetry:
             return False
 
     @contextmanager
-    def span(self, operation: str, *, record_start=False, attributes=None, outcome: SpanOutcome | None = None):
+    def span(self, operation: str, *, record_start=False, attributes=None,
+             outcome: SpanOutcome | None = None, tool: bool = False):
         """Time a sync or async block. Each outermost span starts a run."""
         parent = self._context.get()
         run, trace, parent_span = parent or (uuid4(), uuid4(), None)
@@ -67,8 +68,13 @@ class Telemetry:
             if record_start:
                 self.emit_event(**fields, event_type="span_started", status="ok")
             yield span_id
-        except BaseException:
+        except BaseException as error:
             result.status = "error"
+            safe_attributes = attributes if isinstance(attributes, dict) else {}
+            if isinstance(error, (TimeoutError, httpx.TimeoutException)):
+                attributes = {**safe_attributes, "timed_out": True}
+            elif tool and isinstance(error, Exception):
+                attributes = {**safe_attributes, "tool_exception": True}
             raise
         finally:
             self._context.reset(token)

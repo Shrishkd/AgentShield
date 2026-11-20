@@ -1,5 +1,7 @@
 # AgentShield
 
+**Week 3 adds deterministic incidents and an incident explorer.** Run the seeded demo, configure per-app thresholds, or review the lifecycle API using the [week 3 runbook](docs/week3.md).
+
 **Week 2 adds the Advanced Hybrid RAG adapter and local React run explorer.** Build the UI before starting the collector. Follow the [week 2 runbook](integrations/hybrid_rag/README.md) for the live-model demo, real application launcher, tests and limitations.
 
 Week 1 implements local telemetry ingestion. A Python application records spans or individual checks. The SDK validates and redacts events, puts them in a bounded queue, and exports batches on a background thread. FastAPI authenticates each application and stores its sanitized events in SQLite. An application can read its own events by run, trace and status.

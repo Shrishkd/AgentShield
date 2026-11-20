@@ -77,3 +77,22 @@ def test_concurrent_span_context(monkeypatch):
         assert len(children) == 2
         assert all(row["trace_id"] == root["trace_id"] and row["run_id"] == root["run_id"]
                    for row in children)
+
+
+@pytest.mark.parametrize(("failure", "flag"), [(TimeoutError, "timed_out"), (LookupError, "tool_exception")])
+def test_tool_failure_emits_sanitized_evidence(monkeypatch, failure, flag):
+    exported = []
+
+    def capture(self, url, *, headers, json):
+        exported.extend(json["events"])
+        return httpx.Response(200, request=httpx.Request("POST", url))
+
+    monkeypatch.setattr(httpx.Client, "post", capture)
+    sdk = Telemetry("demo", "test")
+    with pytest.raises(failure, match="private detail"):
+        with sdk.span("retrieve", tool=True):
+            raise failure("private detail")
+    assert sdk.close()
+    event, = exported
+    assert event["attributes"] == {flag: True} and event["status"] == "error"
+    assert "private detail" not in str(event)

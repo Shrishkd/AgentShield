@@ -16,6 +16,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import AwareDatetime, Field
 
 from agentshield.contracts import Contract, Event, Registration, Status
+from backend import incidents
 
 MAX_BYTES = 128 * 1024
 bearer = HTTPBearer(auto_error=False)
@@ -79,9 +80,11 @@ def digest(key: str) -> bytes:
     return hashlib.sha256(key.encode()).digest()
 
 
-def create_app(db_path: Path | None = None, admin_key: str | None = None) -> FastAPI:
+def create_app(db_path: Path | None = None, admin_key: str | None = None,
+               policy_path: Path | None = None) -> FastAPI:
     path = Path(db_path or os.getenv("AGENTSHIELD_DB", ".agentshield/events.sqlite3"))
     admin = admin_key or os.getenv("AGENTSHIELD_ADMIN_KEY")
+    policies = incidents.load_policies(policy_path or os.getenv("AGENTSHIELD_POLICIES"))
 
     @contextmanager
     def database():
@@ -106,6 +109,7 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None) -> Fas
                 CREATE INDEX IF NOT EXISTS events_time ON events(app,timestamp,id);
                 CREATE INDEX IF NOT EXISTS events_run ON events(app,run,timestamp);
             """)
+            incidents.initialize(db, policies)
         yield
 
     api = FastAPI(title="AgentShield", version="0.1.0", lifespan=lifespan)
@@ -124,10 +128,12 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None) -> Fas
                     return row[0]
         raise HTTPException(401, "application credential required")
 
-    @api.post("/v1/apps", status_code=201)
-    def register(registration: Registration, auth: Credentials):
+    def administrator(auth: Credentials):
         if not auth or not secrets.compare_digest(digest(auth.credentials), digest(admin)):
             raise HTTPException(401, "administrator credential required")
+
+    @api.post("/v1/apps", status_code=201, dependencies=[Depends(administrator)])
+    def register(registration: Registration):
         key = secrets.token_urlsafe(32)
         try:
             with database() as db:
@@ -152,6 +158,7 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None) -> Fas
                      event.timestamp.isoformat(timespec="microseconds"), payload))
                 if cursor.rowcount:
                     inserted += 1
+                    incidents.detect(db, event, policies.get(app, incidents.DEFAULT_POLICY))
                 else:
                     existing, = db.execute("SELECT payload FROM events WHERE app=? AND id=?",
                                            (app, ident)).fetchone()
@@ -210,6 +217,31 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None) -> Fas
                 "SELECT payload FROM events WHERE app=? AND run=? ORDER BY timestamp,id LIMIT ? OFFSET ?",
                 (*params, limit, offset))
             return {"run": summary(row), "events": [json.loads(payload) for payload, in records]}
+
+    @api.get("/v1/incidents", response_model=list[incidents.Incident])
+    def list_incidents(app: str = Depends(application), category: incidents.Category | None = None,
+                       severity: incidents.Severity | None = None, status: incidents.State | None = None,
+                       limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)):
+        with database() as db:
+            return incidents.listing(db, app, category, severity, status, limit, offset)
+
+    @api.get("/v1/incidents/{incident_id}", response_model=incidents.Detail)
+    def get_incident(incident_id: UUID, app: str = Depends(application),
+                     limit: int = Query(100, ge=1, le=100), offset: int = Query(0, ge=0)):
+        with database() as db:
+            db.execute("BEGIN")
+            return incidents.detail(db, app, str(incident_id), limit, offset)
+
+    @api.patch("/v1/incidents/{incident_id}", response_model=incidents.Incident,
+               dependencies=[Depends(administrator)])
+    def update_incident(incident_id: UUID, change: incidents.Transition):
+        with database() as db:
+            db.row_factory = sqlite3.Row
+            row = db.execute("UPDATE incidents SET status=? WHERE incident_id=? RETURNING *",
+                             (change.status, str(incident_id))).fetchone()
+            if row is None:
+                raise HTTPException(404, "incident not found")
+            return dict(row)
 
     dist = Path(__file__).resolve().parents[1] / "frontend" / "dist"
     if (dist / "index.html").is_file():

@@ -24,7 +24,7 @@ def instrument(app, telemetry):
         @wraps(fn)
         def call(state):
             attributes = {}
-            with telemetry.span(name, attributes=attributes):
+            with telemetry.span(name, attributes=attributes, tool=name == "retrieve"):
                 result = fn(state)
                 if name == "retrieve" and isinstance(result.get("documents"), list):
                     attributes["retrieved_count"] = len(result["documents"])
