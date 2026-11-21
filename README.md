@@ -1,5 +1,7 @@
 # AgentShield
 
+**Week 7 adds MailMate and a read-only fleet dashboard.** Run all three application integrations against one collector and inspect a mocked Gmail draft failure. [Week 7 runbook](docs/week7.md)
+
 **Week 6 adds repair proposals, isolated fixture replay and human review.** Open an investigation to prepare a proposed configuration change, compare baseline and candidate outcomes, and record a decision. The [Week 6 runbook](docs/week6.md) covers the interactive demo, replay boundaries and API.
 
 **Week 5 adds the MONDAY integration.** AgentShield traces agent calls, generation attempts and validator decisions. The [Week 5 runbook](integrations/monday/README.md) reproduces a rejected claim, source-text fallback, and a labelled claim that escaped into a pending draft.

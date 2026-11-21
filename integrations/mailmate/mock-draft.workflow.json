@@ -1,0 +1,26 @@
+{
+  "name": "AgentShield synthetic draft failure",
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "nodes": [
+    {
+      "id": "b5a7ed8b-c450-456b-83f4-c64b55ec8c29",
+      "name": "Manual trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {}
+    },
+    {
+      "id": "f4304daa-f063-4821-a6c1-a1befdf860a3",
+      "name": "Create draft",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [240, 0],
+      "parameters": {"errorType": "errorMessage", "errorMessage": "Synthetic Gmail draft service unavailable"}
+    }
+  ],
+  "connections": {
+    "Manual trigger": {"main": [[{"node": "Create draft", "type": "main", "index": 0}]]}
+  }
+}

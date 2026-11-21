@@ -86,6 +86,9 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
                policy_path: Path | None = None) -> FastAPI:
     path = Path(db_path or os.getenv("AGENTSHIELD_DB", ".agentshield/events.sqlite3"))
     admin = admin_key or os.getenv("AGENTSHIELD_ADMIN_KEY")
+    viewer = os.getenv("AGENTSHIELD_VIEWER_KEY")
+    if viewer and (len(viewer) < 32 or digest(viewer) == digest(admin or "")):
+        raise ValueError("Use a distinct fleet viewer key of at least 32 characters")
     policies = incidents.load_policies(policy_path or os.getenv("AGENTSHIELD_POLICIES"))
     model = os.getenv("AGENTSHIELD_RANK_MODEL", "")
     if model not in {"", "llama3.2:1b", "llama3.2:3b"}:
@@ -117,6 +120,8 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
                 CREATE INDEX IF NOT EXISTS events_time ON events(app,timestamp,id);
                 CREATE INDEX IF NOT EXISTS events_run ON events(app,run,timestamp);
             """)
+            if viewer and db.execute("SELECT 1 FROM applications WHERE key_hash=?", (digest(viewer),)).fetchone():
+                raise ValueError("Fleet viewer credential is already an application credential")
             incidents.initialize(db, policies)
             investigation.initialize(db)
             repairs.initialize(db)
@@ -159,6 +164,29 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
     def administrator(auth: Credentials):
         if not auth or not secrets.compare_digest(digest(auth.credentials), digest(admin)):
             raise HTTPException(401, "administrator credential required")
+
+    def fleet_viewer(auth: Credentials):
+        if not viewer or not auth or not secrets.compare_digest(digest(auth.credentials), digest(viewer)):
+            raise HTTPException(401, "fleet viewer credential required")
+
+    @api.get("/v1/fleet/apps", response_model=list[str], dependencies=[Depends(fleet_viewer)])
+    def fleet_apps():
+        with database() as db:
+            return [row[0] for row in db.execute("SELECT id FROM applications ORDER BY id")]
+
+    @api.get("/v1/fleet/incidents", response_model=list[incidents.Incident], dependencies=[Depends(fleet_viewer)])
+    def fleet_incidents(app_id: str | None = None, category: incidents.Category | None = None,
+                        severity: incidents.Severity | None = None, status: incidents.State | None = None,
+                        limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)):
+        with database() as db:
+            return incidents.listing(db, app_id, category, severity, status, limit, offset)
+
+    @api.get("/v1/fleet/incidents/{incident_id}", response_model=incidents.Detail, dependencies=[Depends(fleet_viewer)])
+    def fleet_detail(incident_id: UUID, app_id: str, limit: int = Query(100, ge=1, le=100),
+                     offset: int = Query(0, ge=0)):
+        with database() as db:
+            db.execute("BEGIN")
+            return incidents.detail(db, app_id, str(incident_id), limit, offset)
 
     @api.post("/v1/apps", status_code=201, dependencies=[Depends(administrator)])
     def register(registration: Registration):

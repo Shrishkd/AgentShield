@@ -126,9 +126,9 @@ def initialize(db, policies):
 
 def listing(db, app, category, severity, status, limit, offset):
     db.row_factory = sqlite3.Row
-    clauses = ["app_id=?"]
-    params = [app]
-    for column, value in (("category", category), ("severity", severity), ("status", status)):
+    clauses = ["1=1"]
+    params = []
+    for column, value in (("app_id", app), ("category", category), ("severity", severity), ("status", status)):
         if value is not None:
             clauses.append(column + "=?")
             params.append(value)

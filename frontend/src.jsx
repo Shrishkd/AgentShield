@@ -10,7 +10,7 @@ function useQuery(path, key, revision) {
     const abort = new AbortController();
     fetch(path, {headers: {Authorization: 'Bearer ' + key}, signal: abort.signal, cache: 'no-store'})
       .then(async response => {
-        if (!response.ok) throw Error(response.status === 401 ? 'Application key rejected.' : 'Request failed (' + response.status + ').');
+        if (!response.ok) throw Error(response.status === 401 ? 'Key rejected for this access mode.' : 'Request failed (' + response.status + ').');
         return response.json();
       })
       .then(data => {if (!abort.signal.aborted) setResult({path, revision, data});})
@@ -70,7 +70,7 @@ function Workspace({token}) {
 const categories = ['invalid_schema','timeout','tool_exception','verification_failed','escaped_claim','missing_citation',
   'invalid_citation','slow_span','retry_limit','execution_error'];
 
-function Incidents({token}) {
+function Incidents({token, fleet=false}) {
   const [filters, setFilters] = useState({status:'', severity:'', category:''});
   const [offset, page] = useState(0);
   const [selected, select] = useState(null);
@@ -78,15 +78,19 @@ function Incidents({token}) {
   const [revision, refresh] = useState(0);
   const params = new URLSearchParams({offset, limit:21});
   for (const [name,value] of Object.entries(filters)) if (value) params.set(name,value);
-  const list = useQuery('/v1/incidents?'+params, token, revision);
+  const base = fleet ? '/v1/fleet/incidents' : '/v1/incidents';
+  const apps = useQuery(fleet && '/v1/fleet/apps', token, revision);
+  const list = useQuery(base+'?'+params, token, revision);
   const visible = list.data?.slice(0,20) || [];
   const active = visible.find(i=>i.incident_id===selected) || visible[0];
-  const detail = useQuery(active && '/v1/incidents/'+active.incident_id+'?offset='+evidenceOffset,
+  const detail = useQuery(active && base+'/'+active.incident_id+'?offset='+evidenceOffset+
+                          (fleet ? '&app_id='+encodeURIComponent(active.app_id) : ''),
                           token, revision);
   const choices = {status:['open','acknowledged','resolved'], severity:['medium','high'], category:categories};
+  if (fleet) choices.app_id = apps.data || [];
   function reset() {select(null); evidencePage(0);}
   return <><section className="toolbar incident-filters">{Object.entries(choices).map(([name,options])=>
-    <label key={name}>{name} <select value={filters[name]} onChange={e=>{
+    <label key={name}>{name==='app_id'?'Application':name} <select value={filters[name] || ''} onChange={e=>{
       setFilters({...filters,[name]:e.target.value}); page(0); reset();
     }}><option value="">All</option>{options.map(value=><option key={value} value={value}>
       {value.replaceAll('_',' ')}</option>)}</select></label>)}
@@ -104,7 +108,7 @@ function Incidents({token}) {
        !detail.data ? <p>Loading evidence…</p> : <>
         <dl><dt>Incident</dt><dd>{active.incident_id}</dd><dt>Run</dt><dd>{active.run_id}</dd></dl>
         <p>{detail.data.incident.evidence_count} matching events · {active.status}</p>
-        <Investigation key={active.incident_id} incidentId={active.incident_id} token={token}/>
+        {!fleet && <Investigation key={active.incident_id} incidentId={active.incident_id} token={token}/>}
         {detail.data.evidence.map(({event,reason})=><article key={event.event_id}>
           <strong>{reason}</strong><Timeline events={[event]}/></article>)}
         <Pager offset={evidenceOffset} size={100} next={evidenceOffset+100<detail.data.incident.evidence_count}
@@ -115,13 +119,16 @@ function Incidents({token}) {
 function App() {
   const [token, connect] = useState('');
   const [view, setView] = useState('Runs');
+  const [fleet, setFleet] = useState(false);
   return <><header><span className="mark" aria-hidden="true">A</span> AgentShield</header><main>
-    <h1>{view==='Runs'?'Run explorer':'Incident explorer'}</h1>{token ? <><button className="disconnect" onClick={()=>{connect('');setView('Runs');}}>Disconnect</button>
-      <nav className="sections" aria-label="Explorer">{['Runs','Incidents'].map(name=>
-        <button key={name} aria-pressed={view===name} onClick={()=>setView(name)}>{name}</button>)}</nav>
-      {view==='Runs'?<Workspace token={token}/>:<Incidents token={token}/>}</> :
+    <h1>{fleet?'Fleet incidents':view==='Runs'?'Run explorer':'Incident explorer'}</h1>{token ? <><button className="disconnect" onClick={()=>{connect('');setView('Runs');}}>Disconnect</button>
+      {!fleet && <nav className="sections" aria-label="Explorer">{['Runs','Incidents'].map(name=>
+        <button key={name} aria-pressed={view===name} onClick={()=>setView(name)}>{name}</button>)}</nav>}
+      {!fleet && view==='Runs'?<Workspace token={token}/>:<Incidents token={token} fleet={fleet}/>}</> :
       <form onSubmit={e=>{e.preventDefault(); connect(e.currentTarget.elements.key.value.trim());}}>
-        <label>Application key<input type="password" name="key" autoComplete="off" required/></label>
+        <label>Access <select value={fleet?'fleet':'app'} onChange={e=>setFleet(e.target.value==='fleet')}>
+          <option value="app">Application</option><option value="fleet">Read-only fleet</option></select></label>
+        <label>{fleet?'Fleet viewer key':'Application key'}<input type="password" name="key" autoComplete="off" required/></label>
         <button className="primary">Connect</button><p>The key stays in memory until you disconnect or reload.</p></form>}</main></>;
 }
 
