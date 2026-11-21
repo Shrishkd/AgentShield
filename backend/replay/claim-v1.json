@@ -1,0 +1,9 @@
+{
+  "version": "1.0", "fixture_id": 602, "setting": "source_fallback",
+  "cases": [
+    {"name":"unlisted_skill","kind":"target","allowed":["python"],"draft":["python","fortran"],"expect":"source"},
+    {"name":"no_supporting_terms","kind":"target","allowed":[],"draft":["sql"],"expect":"source"},
+    {"name":"faithful_rewrite","kind":"control","allowed":["python","sql"],"draft":["sql"],"expect":"original"},
+    {"name":"grounded_multi_skill","kind":"control","allowed":["python","sql"],"draft":["sql","python"],"expect":"original"}
+  ]
+}

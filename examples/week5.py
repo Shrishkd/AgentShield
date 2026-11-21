@@ -42,6 +42,8 @@ def exercise(client, url, key, monday_root):
                         "fixture-fact","Built Python","fixture-model","bad JSON","Kubernetes","Fortran"))
         rounds = [e for e in events if e["operation"]=="structured_generation" and e["parent_span_id"]==agent["span_id"]]
         if case in {"fallback","corrected"}:
+            # Windows timestamps can tie. MONDAY records the generation index explicitly.
+            rounds.sort(key=lambda e: e["attributes"]["generation_index"])
             assert [e["attributes"]["generation_index"] for e in rounds] == [1,2]
             rejected = [e for e in events if e["attributes"].get("claim_verified") is False]
             assert rejected and all(e["operation"]=="check_bullet" and e["parent_span_id"]==agent["span_id"]
@@ -49,10 +51,10 @@ def exercise(client, url, key, monday_root):
             assembled, = [e for e in events if e["operation"]=="assembled_draft"]
             assert assembled["attributes"]["bullet_fallback_used"] == (case=="fallback")
             report = client.post("/v1/incidents/"+rows[0]["incident_id"]+"/investigate").raise_for_status().json()
-            assert any("check_bullet" in f["statement"] and
-                       {agent["event_id"],rejected[0]["event_id"],rounds[0]["event_id"]}
-                       <= {ref["event_id"] for ref in f["evidence"]}
-                       for f in report["findings"])
+            first_rejections = {e["event_id"] for e in rejected if e["attributes"]["generation_index"] == 1}
+            citations = [{ref["event_id"] for ref in f["evidence"]} for f in report["findings"]
+                         if "check_bullet" in f["statement"]]
+            assert any({agent["event_id"], rounds[0]["event_id"]} <= ids and ids & first_rejections for ids in citations)
         if case == "escaped":
             assert not any(e["attributes"].get("claim_verified") is False for e in events)
             detail = client.get("/v1/incidents/"+rows[0]["incident_id"]).raise_for_status().json()

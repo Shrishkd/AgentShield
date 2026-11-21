@@ -1,5 +1,7 @@
 # AgentShield
 
+**Week 6 adds repair proposals, isolated fixture replay and human review.** Open an investigation to prepare a proposed configuration change, compare baseline and candidate outcomes, and record a decision. The [Week 6 runbook](docs/week6.md) covers the interactive demo, replay boundaries and API.
+
 **Week 5 adds the MONDAY integration.** AgentShield traces agent calls, generation attempts and validator decisions. The [Week 5 runbook](integrations/monday/README.md) reproduces a rejected claim, source-text fallback, and a labelled claim that escaped into a pending draft.
 
 **Week 4 adds checkpointed LangGraph investigations.** Open an incident to investigate its evidence, inspect possible contributors, or download a Markdown report. The [Week 4 runbook](docs/week4.md) covers the demo, optional local Ollama ranking, operating limits and recovery.
@@ -72,4 +74,4 @@ Invoke-RestMethod "$base/v1/events?status=ok&limit=20" -Headers @{Authorization=
 - App credentials scope reads and writes. Exact retries are idempotent within an app. Reusing an ID with changed sanitized content rejects the whole batch. Reads support `run_id`, `trace_id`, `status`, `limit` and `offset` in timestamp and event-ID order.
 - A full queue or failed export drops telemetry. `emit_event()` returns whether the event was queued. Monitor `dropped` and the bounded `close()` result when completeness matters. Nested spans inherit context across asyncio tasks. The SDK has no disk spool or automatic retry. A hard process exit can lose queued data.
 - SQLite and loopback HTTP target a trusted local machine. Protect the database with OS permissions. Key rotation, retention and multi-user access management are future work. Use a single service process for this milestone.
-- The week 1 emitter runs without model calls. The week 2 RAG demo uses local Ollama models. The week 4 graph can investigate offline or use local Ollama to rank competing hypotheses. Repair, replay and benchmarking remain later milestones.
+- The week 1 emitter runs without model calls. The week 2 RAG demo uses local Ollama models. The week 4 graph can investigate offline or use local Ollama to rank competing hypotheses. Week 6 replays synthetic policies in Wasmtime. The held-out benchmark remains a later milestone.

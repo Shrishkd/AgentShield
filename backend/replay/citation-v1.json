@@ -1,0 +1,10 @@
+{
+  "version": "1.0", "fixture_id": 601, "setting": "citation_retry",
+  "cases": [
+    {"name":"unknown_id_corrected","kind":"target","allowed":["s1"],"draft":["s2"],"retry":["s1"],"expect":"retry"},
+    {"name":"retry_still_invalid","kind":"target","allowed":["s1"],"draft":["s1","s2"],"retry":["s3"],"expect":"abstain"},
+    {"name":"empty_retry","kind":"target","allowed":["s1"],"draft":["s2"],"expect":"abstain"},
+    {"name":"valid_citations","kind":"control","allowed":["s1","s2"],"draft":["s2","s1"],"expect":"original"},
+    {"name":"optional_citation","kind":"control","allowed":[],"draft":[],"expect":"original"}
+  ]
+}

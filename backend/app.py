@@ -18,7 +18,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import AwareDatetime, Field
 
 from agentshield.contracts import Contract, Event, Registration, Status
-from backend import incidents, investigation
+from backend import incidents, investigation, repairs
 
 MAX_BYTES = 128 * 1024
 bearer = HTTPBearer(auto_error=False)
@@ -119,6 +119,7 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
             """)
             incidents.initialize(db, policies)
             investigation.initialize(db)
+            repairs.initialize(db)
         stop = asyncio.Event()
         async def process_queue():
             while not stop.is_set():
@@ -314,6 +315,7 @@ def create_app(db_path: Path | None = None, admin_key: str | None = None,
             report = investigation.read_report(db, app, str(incident_id), investigation_id)
         return PlainTextResponse(investigation.markdown(report), media_type="text/markdown")
 
+    repairs.routes(api, database, application, administrator)
     dist = Path(__file__).resolve().parents[1] / "frontend" / "dist"
     if (dist / "index.html").is_file():
         api.mount("/explorer", StaticFiles(directory=dist, html=True), name="explorer")

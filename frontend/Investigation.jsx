@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import RepairReview from './RepairReview';
 
 export default function Investigation({incidentId, token}) {
   const base = '/v1/incidents/' + incidentId;
@@ -58,6 +59,7 @@ export default function Investigation({incidentId, token}) {
         {f.evidence.map(e=><dl key={e.event_id}><dt>Event</dt><dd>{e.event_id}</dd>
           <dt>Trace</dt><dd>{e.trace_id}</dd><dt>Span</dt><dd>{e.span_id}</dd></dl>)}</details>)}
       {report.limitations.map(note=><p key={note}>{note}</p>)}<p>{report.next_step}</p>
-      <button onClick={download}>Download Markdown</button></>}
+      <button onClick={download}>Download Markdown</button>
+      <RepairReview key={report.investigation_id} report={report} token={token}/></>}
   </section>;
 }
