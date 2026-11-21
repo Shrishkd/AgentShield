@@ -1,5 +1,7 @@
 # AgentShield
 
+**Week 5 adds the MONDAY integration.** AgentShield traces agent calls, generation attempts and validator decisions. The [Week 5 runbook](integrations/monday/README.md) reproduces a rejected claim, source-text fallback, and a labelled claim that escaped into a pending draft.
+
 **Week 4 adds checkpointed LangGraph investigations.** Open an incident to investigate its evidence, inspect possible contributors, or download a Markdown report. The [Week 4 runbook](docs/week4.md) covers the demo, optional local Ollama ranking, operating limits and recovery.
 
 **Week 3 adds deterministic incidents and an incident explorer.** Run the seeded demo, configure per-app thresholds, or review the lifecycle API using the [week 3 runbook](docs/week3.md).
@@ -13,7 +15,7 @@ Week 1 implements local telemetry ingestion. A Python application records spans 
 | `sdk/agentshield` | Installable Python SDK, event contract, redaction and exporter |
 | `backend` | Local service, app credentials and immutable event storage |
 | `tests`, `examples` | Contract and failure-path tests, live synthetic demo |
-| `integrations` | Advanced Hybrid RAG adapter and MONDAY integration notes |
+| `integrations` | Opt-in Advanced Hybrid RAG and MONDAY adapters |
 | `frontend`, `evals` | React run explorer and reserved benchmark directory |
 
 ## Run the week 1 acceptance check

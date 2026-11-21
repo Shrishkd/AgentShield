@@ -115,7 +115,7 @@ def acquire(db, app_id, incident_id, model):
                          ORDER BY timestamp DESC,id DESC LIMIT 32""", params)
     snapshot = Snapshot(incident=detail.incident, anchors=detail.evidence,
                         context=[Event.model_validate_json(row[0]) for row in rows], run_event_count=total)
-    signature = hashlib.sha256(json.dumps([1, model, snapshot.model_dump(mode="json")],
+    signature = hashlib.sha256(json.dumps([2, model, snapshot.model_dump(mode="json")],
                                           sort_keys=True).encode()).hexdigest()
     now = time.time()
     row = db.execute("SELECT id,lease_until,report,graph_attempts FROM investigations WHERE incident=? AND signature=?",

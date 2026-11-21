@@ -1,6 +1,6 @@
 # Adapter targets
 
-Advanced Hybrid RAG now has a verified opt-in adapter and local model demo. MONDAY remains at source inspection. See the [RAG runbook](hybrid_rag/README.md).
+Advanced Hybrid RAG and MONDAY have opt-in adapters. The RAG demo exercises local model inference. The MONDAY demo exercises the real pipeline and tracker with scripted Ollama responses. See the [RAG runbook](hybrid_rag/README.md) and [MONDAY runbook](monday/README.md).
 
 | Application | Existing boundaries | First integration check |
 | --- | --- | --- |

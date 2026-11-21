@@ -99,21 +99,45 @@ async def model_order(model, hypotheses, snap):
 
 def needs_policy(state):
     snap = Snapshot.model_validate(state["snapshot"])
-    return snap.incident.category in {"verification_failed", "invalid_schema", "missing_citation", "invalid_citation"} or any(
+    return snap.incident.category in {"verification_failed", "escaped_claim", "invalid_schema", "missing_citation", "invalid_citation"} or any(
         a.event.attributes.get("restricted_action_blocked") for a in snap.anchors)
 
 
 def policy(state):
     snap = Snapshot.model_validate(state["snapshot"])
     findings = []
-    for anchor in sorted(snap.anchors, key=lambda a: not a.event.attributes.get("restricted_action_blocked")):
+    def priority(anchor):
+        if anchor.event.attributes.get("restricted_action_blocked"):
+            return 0
+        return 1 if anchor.event.attributes.get("claim_verified") is False else 2
+
+    for anchor in sorted(snap.anchors, key=priority):
+        sources = [anchor.event]
         if anchor.event.attributes.get("restricted_action_blocked"):
             statement = "The application reported blocking a restricted action. Its downstream outcome is unknown."
+        elif snap.incident.category == "escaped_claim":
+            statement = "An independent check flagged the returned draft. Publication or delivery remains unverified."
         elif anchor.event.attributes.get("claim_verified") is False:
             statement = "The claim verifier rejected the claim. Publication or delivery remains unverified."
+            agent = next((e for e in snap.context if e.span_id == anchor.event.parent_span_id
+                          and e.trace_id == anchor.event.trace_id and e.operation == "resume_tailor"
+                          and e.event_type == "span_finished"), None)
+            if agent and anchor.event.operation in {"check_bullet","check_summary"}:
+                statement = f"MONDAY's {agent.operation} agent rejected a draft claim at {anchor.event.operation}."
+                sources.append(agent)
+                index = anchor.event.attributes.get("generation_index")
+                generations = [e for e in snap.context if e.operation == "structured_generation"
+                               and e.event_type == "span_finished" and e.status == "ok"
+                               and e.trace_id == agent.trace_id and e.parent_span_id == agent.span_id
+                               and e.timestamp <= anchor.event.timestamp
+                               and index is not None and e.attributes.get("generation_index") == index]
+                if len(generations) == 1:
+                    statement += f" The checked output came from generation {index}."
+                    sources.append(generations[0])
+                statement += " Publication or delivery remains unverified."
         else:
             statement = "The recorded validation signal warrants policy review. A security breach remains unverified."
-        findings.append(finding("security_policy", "observed", statement, anchor.event))
+        findings.append(finding("security_policy", "observed", statement, *sources))
         if len(findings) == 3:
             break
     return {"policy": findings}

@@ -10,7 +10,7 @@ from pydantic import AwareDatetime, Field, TypeAdapter
 from agentshield.contracts import Contract, Event, Label
 
 Category = Literal["invalid_schema", "timeout", "tool_exception", "verification_failed",
-                   "missing_citation", "invalid_citation", "slow_span", "retry_limit", "execution_error"]
+                   "missing_citation", "invalid_citation", "slow_span", "retry_limit", "execution_error", "escaped_claim"]
 Severity = Literal["high", "medium"]
 State = Literal["open", "acknowledged", "resolved"]
 
@@ -63,6 +63,10 @@ def matches(event, policy):
         yield "tool_exception", "high", "A tool boundary reported an exception."
     if a.get("claim_verified") is False:
         yield "verification_failed", "medium", "The verifier rejected a claim."
+    elif a.get("validator_passed") is False:
+        yield "verification_failed", "medium", "The application validator flagged a draft check."
+    if a.get("claim_escaped") is True:
+        yield "escaped_claim", "high", "An independent check found an unsupported claim in the returned draft."
     if a.get("citation_ids_valid") is False or a.get("citation_supported") is False:
         yield "invalid_citation", "medium", "The application reported a failed citation check."
     required = a.get("citation_required") is True or event.operation in policy.require_citations_on

@@ -8,8 +8,9 @@ Label = Annotated[str, Field(pattern=r"^[a-z][a-z0-9_.-]{0,63}$")]
 Status = Literal["ok", "error"]
 Kind = Literal["span_started", "span_finished", "validation", "check"]
 FLAGS = {"citation_supported", "citation_ids_valid", "has_citations", "claim_verified",
-         "schema_valid", "timed_out", "tool_exception", "citation_required", "restricted_action_blocked"}
-COUNTS = {"retrieved_count", "retry_count"}
+         "schema_valid", "timed_out", "tool_exception", "citation_required", "restricted_action_blocked",
+         "validator_passed", "claim_escaped", "bullet_fallback_used", "summary_fallback_used", "models_exhausted"}
+COUNTS = {"retrieved_count", "retry_count", "generation_index", "model_slot"}
 
 
 class Contract(BaseModel):

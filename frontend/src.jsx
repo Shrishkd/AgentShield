@@ -67,7 +67,7 @@ function Workspace({token}) {
           next={eventOffset+100<detail.data.run.event_count} move={eventPage}/></>}</>}</section></div></>;
 }
 
-const categories = ['invalid_schema','timeout','tool_exception','verification_failed','missing_citation',
+const categories = ['invalid_schema','timeout','tool_exception','verification_failed','escaped_claim','missing_citation',
   'invalid_citation','slow_span','retry_limit','execution_error'];
 
 function Incidents({token}) {
