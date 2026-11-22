@@ -1,12 +1,26 @@
 from collections import Counter
 import json
+from pathlib import Path
 
 import httpx
 import pytest
 from pydantic import ValidationError
 
-from evals.benchmark import Case, Decision, load_suite, single_agent, summarize
+from evals.benchmark import DIGEST, Case, Decision, load_suite, single_agent, summarize
 from evals.audit import facts
+
+RESULTS = Path(__file__).resolve().parents[1] / "evals" / "results"
+
+
+@pytest.mark.parametrize("trial", [1, 2])
+def test_published_measurements_recompute(trial):
+    measured = json.loads((RESULTS / f"v1-trial-{trial}.json").read_bytes())
+    cases = load_suite()
+    rows = measured["observations"]
+    assert measured["suite_sha256"] == DIGEST
+    assert [row["id"] for row in rows] == [c.id for c in cases]
+    assert measured["model"]["name"] == "llama3.2:1b"
+    assert measured["summary"] == summarize(cases, rows, measured["model"])
 
 
 def test_frozen_suite_and_labels():

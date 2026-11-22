@@ -1,5 +1,19 @@
 # Week 8 · Evaluation and packaging
 
+## Measured results
+
+Two complete runs of the frozen 100-case suite used local Ollama `llama3.2:1b` (Q8_0, digest prefix `baf6a787fdff`) on Windows. Each run started a fresh SQLite collector. Both accepted 100/100 batches, detected 110/115 labelled incident categories, and produced 0 false alarms on 15 clean controls. Pooled detection precision was **100%** and recall was **95.65%**. P95 ingest latency was 49.51 ms in the first run and 29.79 ms in the second. [Trial 1 observations](../evals/results/v1-trial-1.json) · [Trial 2 observations](../evals/results/v1-trial-2.json)
+
+| Investigation mode | Top-1 cause | Top-3 cause | Median investigation time | Model calls | Errors |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Rules only | 0/50 | 0/50 | 9.34 ms | 0 | 0/160 |
+| Single local model | 8/50 | 22/50 | 5.46 s | 160 | 42/160 |
+| Specialized graph | 43/50 | 50/50 | 83.88 ms | 23 | 0/160 |
+
+The cause denominator is 25 known-cause cases repeated twice. The graph placed the cause first on 21/25 and 22/25 cases respectively, exceeding the 80% target in both runs. The rules baseline always abstains from ranking causes. The single-model baseline frequently returned unusable evidence indices. Its results apply to the specified model, prompt and response contract. Machine load varied during measurement, so these timings describe local runs rather than serving capacity.
+
+The graph identified 20/30 simulated policy attempts across both trials. All 20 block findings cited real block flags. On the two available repair fixtures, both sandboxed changes passed in both runs and all four previously passing controls stayed green each time. Local inference incurred **$0 in external model fees**. The benchmark did not measure electricity, human review time or production repair effectiveness.
+
 ## Start from a clean checkout
 
 Docker Compose builds the React explorer and serves it with FastAPI on loopback. SQLite data persists in the project's named volume. From the repository root in PowerShell, generate two independent keys for this installation. Save them privately if you plan to keep using the same installation.
@@ -66,6 +80,8 @@ The first command exercises the rules and specialized graph without inference. T
 
 The suite includes 25 RAG cases, 25 MONDAY cases, 20 MailMate cases, 15 blocked-action cases and 15 controls. Three cases are sanitized recordings of Week 7 demo executions. The other 97 use controlled telemetry with varied signals, nesting, ordering and thresholds. Cases include concurrent-looking contributors, successful parent operations, absence of required evidence, and an exact latency and retry boundary. The recorded traces are previously exercised integration cases. The synthetic variants share templates and existing detector concepts. This suite measures these conditions only.
 
+The policy cases label a restricted action attempt as reportable even when the application successfully blocked it. Five such traces have an OK status and the block flag alone. The current detector stores those events without opening an incident, so investigators never receive them. This coverage gap concerns alerting on an attempted action. All actions in these fixtures are simulated.
+
 ### How scoring works
 
 - **Detection** compares sets of incident categories per run. Precision counts correct categories among reported categories. Recall counts them among labelled categories. A clean false alarm is any incident on a labelled clean run. All investigation modes share the same detector.
@@ -86,3 +102,5 @@ The independent factual audit supported all 123 observed graph findings. Each ro
 The core starts with an empty database, accepts authenticated batches and serves the built explorer. The scripted benchmark must read 100 distinct frozen runs and write a result file. Model-free CI exercises the test suite, benchmark, Week 1 and Week 6 demos, and a Compose startup and ingestion check on Linux. Hosted CI status becomes available after you push. The full three-way comparison requires the named local model.
 
 Local acceptance exercised both the Linux Compose image and a disposable Windows source tree with newly installed dependencies. The packaged collector returned 100 unique events, 10 filtered errors and 100 ignored duplicate submissions. The clean source run built the explorer, passed both scripted demos and passed 46 tests. Three integration tests skipped their unavailable application or live-model prerequisites in that clean tree.
+
+The final workspace suite passed 51 tests, including both checks that recompute the published scores from raw observations. Its one opt-in live RAG test passed separately on retry in the RAG Python environment with local Ollama. The integration returned eight events on a successful request and six on a failed request, and preserved the cached answer and sources when the collector was offline. [Live RAG test instructions](../integrations/hybrid_rag/README.md)
