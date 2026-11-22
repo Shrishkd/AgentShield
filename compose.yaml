@@ -1,0 +1,20 @@
+services:
+  collector:
+    build: .
+    environment:
+      AGENTSHIELD_ADMIN_KEY: ${AGENTSHIELD_ADMIN_KEY:?Set a random administrator key of at least 32 characters}
+      AGENTSHIELD_VIEWER_KEY: ${AGENTSHIELD_VIEWER_KEY:-}
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - traces:/data
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/explorer/', timeout=2).close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+volumes:
+  traces:

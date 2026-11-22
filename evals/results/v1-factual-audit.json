@@ -1,0 +1,1609 @@
+{
+  "suite_sha256": "ffe288991dcd54ec08425414b987139807cfe1e72ef479c057e015586b2361df",
+  "observed_faithfulness": {
+    "count": 123,
+    "of": 123,
+    "rate": 1.0
+  },
+  "findings": [
+    {
+      "case": "rag-00",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "41b5f549-763f-43f2-87fb-800dd9132c2a",
+          "trace_id": "2d8918f0-6725-44c6-8e11-bb043168ca44",
+          "span_id": "47512c3d-95b8-4f0c-b3f5-0538e39bfa17"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-01",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "5ac8bb9e-d9ff-5233-8e0d-ac66dd01e029",
+          "trace_id": "987871be-9de8-5ed7-a92c-1d8d45c517ec",
+          "span_id": "ae8c2c20-d869-5c8a-8947-89a640e7a482"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-02",
+      "role": "triage",
+      "statement": "Citations were required and the check found none.",
+      "evidence": [
+        {
+          "event_id": "7cdfad4c-4db0-5577-9923-300a1ce1f34e",
+          "trace_id": "b22b8411-df7b-5de4-b601-63ac22f5853d",
+          "span_id": "dbb931fb-cb94-56a7-9fa2-5ef81b086e54"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-02",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "7cdfad4c-4db0-5577-9923-300a1ce1f34e",
+          "trace_id": "b22b8411-df7b-5de4-b601-63ac22f5853d",
+          "span_id": "dbb931fb-cb94-56a7-9fa2-5ef81b086e54"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-03",
+      "role": "triage",
+      "statement": "The application reported a failed citation check.",
+      "evidence": [
+        {
+          "event_id": "28e5b914-695a-5f80-a1be-8702424079f9",
+          "trace_id": "3d7c5e67-66ee-5f25-a511-f4109cde3da0",
+          "span_id": "f3a74214-4055-52b8-b98b-d8d37d7149e7"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-03",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "28e5b914-695a-5f80-a1be-8702424079f9",
+          "trace_id": "3d7c5e67-66ee-5f25-a511-f4109cde3da0",
+          "span_id": "f3a74214-4055-52b8-b98b-d8d37d7149e7"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-04",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "16d78780-04ed-5646-a861-58af5c0463d6",
+          "trace_id": "08fa76ec-2bea-528d-bc98-b44905a2fda4",
+          "span_id": "6efae3a5-6393-5e8d-97ac-162936c8a3b6"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-05",
+      "role": "triage",
+      "statement": "The application reported a failed citation check.",
+      "evidence": [
+        {
+          "event_id": "c69396bb-02f7-5de4-8897-1071f3e0bbaa",
+          "trace_id": "50a35d46-abe7-57c1-ad84-902eb561104d",
+          "span_id": "406e93f7-b9ed-56d0-a04d-83d6d8772a28"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-05",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "c69396bb-02f7-5de4-8897-1071f3e0bbaa",
+          "trace_id": "50a35d46-abe7-57c1-ad84-902eb561104d",
+          "span_id": "406e93f7-b9ed-56d0-a04d-83d6d8772a28"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-06",
+      "role": "triage",
+      "statement": "Duration exceeded the configured 250 ms limit.",
+      "evidence": [
+        {
+          "event_id": "476fe64b-ee32-500e-8ecf-71b11c0af239",
+          "trace_id": "32fc6205-e346-5ead-9161-63d59a8aaa36",
+          "span_id": "7265cf85-6861-56dd-93db-837cb104ca7b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-07",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "fe32e6c6-0474-5bff-a8bc-096bcfa20659",
+          "trace_id": "a095856b-3e26-597c-aae8-b2ad4b9cd6ea",
+          "span_id": "44674a1b-70a2-503b-8693-529d9f2a6b4d"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-08",
+      "role": "triage",
+      "statement": "Citations were required and the check found none.",
+      "evidence": [
+        {
+          "event_id": "76ab2dd6-9bca-51e4-9db0-69b644c84c32",
+          "trace_id": "6fd57a69-afdd-5a10-90ed-be2bd78fb0ea",
+          "span_id": "482117c1-8241-50bf-ad0f-456806ee9cf5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-08",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "76ab2dd6-9bca-51e4-9db0-69b644c84c32",
+          "trace_id": "6fd57a69-afdd-5a10-90ed-be2bd78fb0ea",
+          "span_id": "482117c1-8241-50bf-ad0f-456806ee9cf5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-09",
+      "role": "triage",
+      "statement": "The application reported a failed citation check.",
+      "evidence": [
+        {
+          "event_id": "733f36d0-fa48-5a4e-b537-d406d35f3fb5",
+          "trace_id": "3118921f-081c-566c-b255-6e43e02b2c91",
+          "span_id": "201c4605-f803-51f4-9eb6-0aed0435898b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-09",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "733f36d0-fa48-5a4e-b537-d406d35f3fb5",
+          "trace_id": "3118921f-081c-566c-b255-6e43e02b2c91",
+          "span_id": "201c4605-f803-51f4-9eb6-0aed0435898b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-10",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "5853ca97-30d9-5b3e-a76e-325371f23d7a",
+          "trace_id": "b6889a5a-7871-5bd7-a6d3-6330895d37a1",
+          "span_id": "7ec8c28b-4334-5099-817e-b67a5df3d5d5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-11",
+      "role": "triage",
+      "statement": "The application reported a failed citation check.",
+      "evidence": [
+        {
+          "event_id": "b6bf7b80-4a90-5a2d-97e6-719c62eb4dac",
+          "trace_id": "a528cb56-044d-57ac-b96d-33a6420531de",
+          "span_id": "846be37a-062e-50f5-aac7-891f509902e5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-11",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "b6bf7b80-4a90-5a2d-97e6-719c62eb4dac",
+          "trace_id": "a528cb56-044d-57ac-b96d-33a6420531de",
+          "span_id": "846be37a-062e-50f5-aac7-891f509902e5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-12",
+      "role": "triage",
+      "statement": "Duration exceeded the configured 250 ms limit.",
+      "evidence": [
+        {
+          "event_id": "2b062bff-6867-5956-8a86-4e1cac6ae4bb",
+          "trace_id": "2ed2a343-450b-5214-895c-a01204644826",
+          "span_id": "b32693a0-ba71-51dd-af27-28947ddef664"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-13",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "fa737268-93e1-53fc-9c9e-f03ed2462846",
+          "trace_id": "b3739dcc-2013-5160-b510-275be076e7ca",
+          "span_id": "541953ea-2c81-5a81-8ffa-b280981ec3ac"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-14",
+      "role": "triage",
+      "statement": "Citations were required and the check found none.",
+      "evidence": [
+        {
+          "event_id": "eaad8112-3782-5165-a0d5-b3a952ab3410",
+          "trace_id": "82c01f92-0431-5b13-b0d7-367a86b46b54",
+          "span_id": "26b688f3-2537-50fa-ab22-f1695f98829a"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-14",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "eaad8112-3782-5165-a0d5-b3a952ab3410",
+          "trace_id": "82c01f92-0431-5b13-b0d7-367a86b46b54",
+          "span_id": "26b688f3-2537-50fa-ab22-f1695f98829a"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-15",
+      "role": "triage",
+      "statement": "The application reported a failed citation check.",
+      "evidence": [
+        {
+          "event_id": "5e8c2df4-45f3-57de-b35c-56870360fc7d",
+          "trace_id": "b329dd00-8678-5c09-9463-4ce3136cbe9f",
+          "span_id": "3d7fb303-ef59-51bc-8c09-36d03ee80e13"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-15",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "5e8c2df4-45f3-57de-b35c-56870360fc7d",
+          "trace_id": "b329dd00-8678-5c09-9463-4ce3136cbe9f",
+          "span_id": "3d7fb303-ef59-51bc-8c09-36d03ee80e13"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-16",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "97f43d42-81ad-53cb-9319-416aee75b424",
+          "trace_id": "f114c1a1-dc15-5070-bc33-095e78b8eca0",
+          "span_id": "a7ae3de8-79d2-5687-a3d7-4e66b03f9b85"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-17",
+      "role": "triage",
+      "statement": "The application reported a failed citation check.",
+      "evidence": [
+        {
+          "event_id": "ee0782ce-0db4-52cf-b462-26f5479994dd",
+          "trace_id": "6806acfc-40e4-5885-b746-416478e0ebf0",
+          "span_id": "b3bb5390-7abf-5158-a445-31958f7ce0f5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-17",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "ee0782ce-0db4-52cf-b462-26f5479994dd",
+          "trace_id": "6806acfc-40e4-5885-b746-416478e0ebf0",
+          "span_id": "b3bb5390-7abf-5158-a445-31958f7ce0f5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-18",
+      "role": "triage",
+      "statement": "Duration exceeded the configured 250 ms limit.",
+      "evidence": [
+        {
+          "event_id": "258b4025-9ed4-52ee-8bf6-8f8ecad0325f",
+          "trace_id": "ce64bef7-4f99-568a-b850-333da6b36fef",
+          "span_id": "df72b0ac-5c04-50b4-9fb7-d058ce91d7ec"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-19",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "f5c98388-a585-50ad-a283-3b520d78fd15",
+          "trace_id": "93d576e6-d6fd-5a58-a1ed-108b9731472f",
+          "span_id": "d955c0a1-ea4b-51d2-929c-42c9ff77f3cb"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-20",
+      "role": "triage",
+      "statement": "Citations were required and the check found none.",
+      "evidence": [
+        {
+          "event_id": "c6ccd112-4611-52c0-88da-b2ac256be201",
+          "trace_id": "b2a95e5b-b032-5127-bc31-fc037ae39947",
+          "span_id": "63318174-8806-51be-b64e-658b60e74e82"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-20",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "c6ccd112-4611-52c0-88da-b2ac256be201",
+          "trace_id": "b2a95e5b-b032-5127-bc31-fc037ae39947",
+          "span_id": "63318174-8806-51be-b64e-658b60e74e82"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-21",
+      "role": "triage",
+      "statement": "The application reported a failed citation check.",
+      "evidence": [
+        {
+          "event_id": "a3da3fd1-545e-50d8-a9c0-f89a59483b95",
+          "trace_id": "8df5f8a2-870f-5e73-983a-7e8ba38930f3",
+          "span_id": "5c8a9f34-4c7e-5c09-be82-bb6b2c60cc09"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-21",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "a3da3fd1-545e-50d8-a9c0-f89a59483b95",
+          "trace_id": "8df5f8a2-870f-5e73-983a-7e8ba38930f3",
+          "span_id": "5c8a9f34-4c7e-5c09-be82-bb6b2c60cc09"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-22",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "ca43d086-3074-5267-90f4-828d6f8352c1",
+          "trace_id": "b82a740b-f5c4-5601-8d60-c6105b0a272d",
+          "span_id": "ba19a3f6-51dd-5639-8539-47f4bd1966b9"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-23",
+      "role": "triage",
+      "statement": "The application reported a failed citation check.",
+      "evidence": [
+        {
+          "event_id": "53186bd3-2abd-5185-8d8f-8e6540bbabfc",
+          "trace_id": "855158b1-871f-53a7-af4b-c0dbaf3c43ba",
+          "span_id": "234cb805-6df2-56f8-b2fc-d15a4d042c87"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-23",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "53186bd3-2abd-5185-8d8f-8e6540bbabfc",
+          "trace_id": "855158b1-871f-53a7-af4b-c0dbaf3c43ba",
+          "span_id": "234cb805-6df2-56f8-b2fc-d15a4d042c87"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "rag-24",
+      "role": "triage",
+      "statement": "Duration exceeded the configured 250 ms limit.",
+      "evidence": [
+        {
+          "event_id": "10fcc274-18e4-597e-8632-66647eec2bbe",
+          "trace_id": "ab682057-cf0b-5a5b-811a-418522249d9c",
+          "span_id": "2fcc92ae-cd8c-500d-b889-a7d939c7c9f2"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-00",
+      "role": "triage",
+      "statement": "An independent check found an unsupported claim in the returned draft.",
+      "evidence": [
+        {
+          "event_id": "c07f97af-cc8d-4585-bce0-303457e121c3",
+          "trace_id": "f84ad246-6fa5-4e81-998e-7852c4814232",
+          "span_id": "12bd1c02-a251-4cb7-9618-25416ff1fa3b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-00",
+      "role": "security_policy",
+      "statement": "An independent check flagged the returned draft. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "c07f97af-cc8d-4585-bce0-303457e121c3",
+          "trace_id": "f84ad246-6fa5-4e81-998e-7852c4814232",
+          "span_id": "12bd1c02-a251-4cb7-9618-25416ff1fa3b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-01",
+      "role": "triage",
+      "statement": "The application reported schema_valid=false.",
+      "evidence": [
+        {
+          "event_id": "24275219-b678-5e76-add1-81ced2c8969a",
+          "trace_id": "d26759d0-3a14-5ed3-af3e-a4d15a594126",
+          "span_id": "5b3c0208-3e29-59e5-bfba-bc6ed44f5def"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-01",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "24275219-b678-5e76-add1-81ced2c8969a",
+          "trace_id": "d26759d0-3a14-5ed3-af3e-a4d15a594126",
+          "span_id": "5b3c0208-3e29-59e5-bfba-bc6ed44f5def"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-02",
+      "role": "triage",
+      "statement": "The verifier rejected a claim.",
+      "evidence": [
+        {
+          "event_id": "4c9a0d2c-3572-5683-9f1a-7dbb2dfd3e5a",
+          "trace_id": "68ef79f8-81aa-5659-8a9f-08c6a94513ce",
+          "span_id": "8ea3cc4b-286e-5b1e-8177-d17067ae62aa"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-02",
+      "role": "security_policy",
+      "statement": "The claim verifier rejected the claim. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "4c9a0d2c-3572-5683-9f1a-7dbb2dfd3e5a",
+          "trace_id": "68ef79f8-81aa-5659-8a9f-08c6a94513ce",
+          "span_id": "8ea3cc4b-286e-5b1e-8177-d17067ae62aa"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-03",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "291ba9a8-df65-5d63-8d62-f03ff817ee09",
+          "trace_id": "f60aea96-2f44-54a9-bb61-e969321ba5bb",
+          "span_id": "9322dd14-cdfd-5c4a-9616-2c74fee15570"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-04",
+      "role": "triage",
+      "statement": "An independent check found an unsupported claim in the returned draft.",
+      "evidence": [
+        {
+          "event_id": "dc54f881-e49a-5136-b6cf-47849868c0ff",
+          "trace_id": "5083ecda-3861-58a5-90a9-6fbe5c4d347c",
+          "span_id": "2dee5005-c625-5430-977f-fd219bebf4dc"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-04",
+      "role": "security_policy",
+      "statement": "An independent check flagged the returned draft. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "dc54f881-e49a-5136-b6cf-47849868c0ff",
+          "trace_id": "5083ecda-3861-58a5-90a9-6fbe5c4d347c",
+          "span_id": "2dee5005-c625-5430-977f-fd219bebf4dc"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-05",
+      "role": "triage",
+      "statement": "Retry count exceeded the configured maximum of 2.",
+      "evidence": [
+        {
+          "event_id": "397ce2f6-01e5-5188-baca-e2258d6284c9",
+          "trace_id": "a4d7277a-c885-59ef-8e76-1f57d7ce0748",
+          "span_id": "5f107507-cc14-547f-98d5-d1dbc76b8d07"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-06",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "52e7fb83-5a90-5888-88a1-4a8ab2a4b5b8",
+          "trace_id": "68481096-2232-5c73-a8e5-ba41f2d2e443",
+          "span_id": "ef263dc2-cc67-5b57-bfbc-da99a810a804"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-07",
+      "role": "triage",
+      "statement": "The application reported schema_valid=false.",
+      "evidence": [
+        {
+          "event_id": "e530a7c7-9284-57c5-991c-5b4d738e0894",
+          "trace_id": "30ebc2fd-cf32-50e1-8ee2-fec0df140574",
+          "span_id": "f92074ed-8fb6-5439-98a5-398b5d7a0739"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-07",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "e530a7c7-9284-57c5-991c-5b4d738e0894",
+          "trace_id": "30ebc2fd-cf32-50e1-8ee2-fec0df140574",
+          "span_id": "f92074ed-8fb6-5439-98a5-398b5d7a0739"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-08",
+      "role": "triage",
+      "statement": "The verifier rejected a claim.",
+      "evidence": [
+        {
+          "event_id": "d9d7b84e-613e-58a2-a5f9-75c8c6020914",
+          "trace_id": "72c3a4e3-ad1a-5a3d-a8ae-c653830cdd78",
+          "span_id": "3c1026f5-0083-5c81-8b63-5359f1d0b32a"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-08",
+      "role": "security_policy",
+      "statement": "The claim verifier rejected the claim. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "d9d7b84e-613e-58a2-a5f9-75c8c6020914",
+          "trace_id": "72c3a4e3-ad1a-5a3d-a8ae-c653830cdd78",
+          "span_id": "3c1026f5-0083-5c81-8b63-5359f1d0b32a"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-09",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "c54bbfdb-d788-550e-9ffe-63e658abffb4",
+          "trace_id": "e1e3ecc5-0cdf-5843-bf34-014ce173e737",
+          "span_id": "9416a6fa-39d1-5409-b871-a980bab5aabd"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-10",
+      "role": "triage",
+      "statement": "An independent check found an unsupported claim in the returned draft.",
+      "evidence": [
+        {
+          "event_id": "0cdc3031-3be8-5a2c-a916-bfa2f9878f61",
+          "trace_id": "e46a65b0-f4dd-5987-87b0-f54d52ed4aad",
+          "span_id": "99463eb5-a4dd-5f1c-8875-b031dc7df0c1"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-10",
+      "role": "security_policy",
+      "statement": "An independent check flagged the returned draft. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "0cdc3031-3be8-5a2c-a916-bfa2f9878f61",
+          "trace_id": "e46a65b0-f4dd-5987-87b0-f54d52ed4aad",
+          "span_id": "99463eb5-a4dd-5f1c-8875-b031dc7df0c1"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-11",
+      "role": "triage",
+      "statement": "Retry count exceeded the configured maximum of 2.",
+      "evidence": [
+        {
+          "event_id": "91dddf13-7ce8-5f76-8b23-565c4f290826",
+          "trace_id": "7bc7eb56-ad3a-5ed3-8e3e-3eb604425cdc",
+          "span_id": "051e7300-ab41-59de-9f72-348f9108929e"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-12",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "8e94271a-de01-58d0-b399-f2ac0686e7c6",
+          "trace_id": "d75736bf-bd46-53df-8781-972be958bfe6",
+          "span_id": "4a91b215-ec61-5073-bcab-b05484604873"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-13",
+      "role": "triage",
+      "statement": "The application reported schema_valid=false.",
+      "evidence": [
+        {
+          "event_id": "7ca4eee0-1ebc-5e4f-970f-122181c30c31",
+          "trace_id": "59666299-4e03-5d26-ba31-869fc352e240",
+          "span_id": "2b2d7068-ac0d-57e5-ad79-5ce5763307b6"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-13",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "7ca4eee0-1ebc-5e4f-970f-122181c30c31",
+          "trace_id": "59666299-4e03-5d26-ba31-869fc352e240",
+          "span_id": "2b2d7068-ac0d-57e5-ad79-5ce5763307b6"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-14",
+      "role": "triage",
+      "statement": "The verifier rejected a claim.",
+      "evidence": [
+        {
+          "event_id": "154c76dd-ccef-52cc-974d-957bded28fac",
+          "trace_id": "6aea0738-2c00-59c2-bf4d-962dbd21ef10",
+          "span_id": "5f11b121-ea47-5abf-936a-14f90b13524c"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-14",
+      "role": "security_policy",
+      "statement": "The claim verifier rejected the claim. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "154c76dd-ccef-52cc-974d-957bded28fac",
+          "trace_id": "6aea0738-2c00-59c2-bf4d-962dbd21ef10",
+          "span_id": "5f11b121-ea47-5abf-936a-14f90b13524c"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-15",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "df635846-7976-588f-8f16-d63ecb488a5a",
+          "trace_id": "c627ac9a-c971-5461-b0c4-a72bf971d678",
+          "span_id": "d496da81-9c55-560b-9f7b-9afda00390e9"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-16",
+      "role": "triage",
+      "statement": "An independent check found an unsupported claim in the returned draft.",
+      "evidence": [
+        {
+          "event_id": "eefdd3d7-5a18-5c69-aa9c-d5cf9f8986fd",
+          "trace_id": "36ef7096-0811-545f-b6e7-5757ea70ac06",
+          "span_id": "4b0c308a-e41d-5d30-af27-8b858e52542a"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-16",
+      "role": "security_policy",
+      "statement": "An independent check flagged the returned draft. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "eefdd3d7-5a18-5c69-aa9c-d5cf9f8986fd",
+          "trace_id": "36ef7096-0811-545f-b6e7-5757ea70ac06",
+          "span_id": "4b0c308a-e41d-5d30-af27-8b858e52542a"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-17",
+      "role": "triage",
+      "statement": "Retry count exceeded the configured maximum of 2.",
+      "evidence": [
+        {
+          "event_id": "15d6407a-cc06-5fea-96aa-b90a1c63f67d",
+          "trace_id": "35766ac7-cc20-55b8-9117-0784c4622fd7",
+          "span_id": "a893b31c-088d-5775-bc8b-8f3a9f92aebc"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-18",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "43e57768-fb01-5461-95c2-90a456d2737f",
+          "trace_id": "1008d66e-bbfb-5078-baa1-0482247273f9",
+          "span_id": "538be6d7-cf09-5092-9114-25feeeda2af8"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-19",
+      "role": "triage",
+      "statement": "The application reported schema_valid=false.",
+      "evidence": [
+        {
+          "event_id": "e342b641-a74c-5b69-afe7-f4935c9edf0d",
+          "trace_id": "d33d0e09-95f0-5bd1-bad4-794fb87e2fe9",
+          "span_id": "7662aef2-5582-550e-8616-710cdf2feb9b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-19",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "e342b641-a74c-5b69-afe7-f4935c9edf0d",
+          "trace_id": "d33d0e09-95f0-5bd1-bad4-794fb87e2fe9",
+          "span_id": "7662aef2-5582-550e-8616-710cdf2feb9b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-20",
+      "role": "triage",
+      "statement": "The verifier rejected a claim.",
+      "evidence": [
+        {
+          "event_id": "9c9f685f-5254-5c63-90e9-a5d326ea6384",
+          "trace_id": "f12ea9b4-23f7-537f-99da-c1d49c940b0a",
+          "span_id": "8c3228d2-018d-54d3-b9be-e3329fa1197b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-20",
+      "role": "security_policy",
+      "statement": "The claim verifier rejected the claim. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "9c9f685f-5254-5c63-90e9-a5d326ea6384",
+          "trace_id": "f12ea9b4-23f7-537f-99da-c1d49c940b0a",
+          "span_id": "8c3228d2-018d-54d3-b9be-e3329fa1197b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-21",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "e75e5410-5f4b-58dd-af7c-76f14e83d21c",
+          "trace_id": "f92956ee-afa4-5630-babf-545666639afe",
+          "span_id": "45e1ea97-7541-509b-ae73-9e2816c6dbf1"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-22",
+      "role": "triage",
+      "statement": "An independent check found an unsupported claim in the returned draft.",
+      "evidence": [
+        {
+          "event_id": "6183bec7-7b2e-5c0b-ae86-eb58102e8668",
+          "trace_id": "d2986801-9e48-5ebb-bb1d-a01241a07310",
+          "span_id": "7c30d41a-5760-5ba8-b423-b7b77db80f7b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-22",
+      "role": "security_policy",
+      "statement": "An independent check flagged the returned draft. Publication or delivery remains unverified.",
+      "evidence": [
+        {
+          "event_id": "6183bec7-7b2e-5c0b-ae86-eb58102e8668",
+          "trace_id": "d2986801-9e48-5ebb-bb1d-a01241a07310",
+          "span_id": "7c30d41a-5760-5ba8-b423-b7b77db80f7b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-23",
+      "role": "triage",
+      "statement": "Retry count exceeded the configured maximum of 2.",
+      "evidence": [
+        {
+          "event_id": "f2499f4d-9128-5cc9-8f1e-6bb7225aa05c",
+          "trace_id": "d5132376-1c49-5d43-938c-18b448b59f79",
+          "span_id": "0f370bd4-f7f5-5f67-bb8b-96b59130c9f5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "monday-24",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "c4d681fe-aa07-5d4d-b746-1ed4fb00a4fa",
+          "trace_id": "2be79c0c-f9ba-580e-b07b-985fb90ee7af",
+          "span_id": "782e891d-d28d-5e85-8739-9496b8e0f632"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-00",
+      "role": "triage",
+      "statement": "A tool boundary reported an exception.",
+      "evidence": [
+        {
+          "event_id": "3639b647-20bf-52c8-a50c-224fcf8e6877",
+          "trace_id": "e63f01af-a00d-5ded-91b9-cd0bbf138ceb",
+          "span_id": "08549094-a913-5d26-b719-5a6bc98fe2fd"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-01",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "d5938243-165e-5c10-84d0-f05cc0d39a5c",
+          "trace_id": "e8c98ee6-1fff-56cc-9536-e5c45a316d9c",
+          "span_id": "7a5391f9-36e4-5d8d-af10-a38a3a8828d0"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-02",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "ded958ea-9005-579a-a7ab-87da3b73fd21",
+          "trace_id": "587841d5-1fd2-559b-9872-37461fe4fa96",
+          "span_id": "8d3276f1-cf7d-524e-8789-a793eb4799e3"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-03",
+      "role": "triage",
+      "statement": "The application validator flagged a draft check.",
+      "evidence": [
+        {
+          "event_id": "c96cba11-4975-5ac7-964a-40d6bb30b031",
+          "trace_id": "488ff2c3-fff3-5e08-8e34-0f56ae3fa907",
+          "span_id": "81ed5a7b-c21b-56e5-906f-5ea7890959d5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-03",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "c96cba11-4975-5ac7-964a-40d6bb30b031",
+          "trace_id": "488ff2c3-fff3-5e08-8e34-0f56ae3fa907",
+          "span_id": "81ed5a7b-c21b-56e5-906f-5ea7890959d5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-04",
+      "role": "triage",
+      "statement": "The application reported schema_valid=false.",
+      "evidence": [
+        {
+          "event_id": "f55fcaf8-91f7-58a5-aff4-e239c06463f2",
+          "trace_id": "1d8aeb1f-d4a0-51b0-9b1b-36216b21d99d",
+          "span_id": "95ed0509-1eb8-50ee-bf46-1faca4699064"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-04",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "f55fcaf8-91f7-58a5-aff4-e239c06463f2",
+          "trace_id": "1d8aeb1f-d4a0-51b0-9b1b-36216b21d99d",
+          "span_id": "95ed0509-1eb8-50ee-bf46-1faca4699064"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-05",
+      "role": "triage",
+      "statement": "Retry count exceeded the configured maximum of 2.",
+      "evidence": [
+        {
+          "event_id": "4deccf70-b8f4-5e12-8023-1857db1174b5",
+          "trace_id": "5b0beb23-88b5-5a23-bc4c-e5fafc991c9c",
+          "span_id": "ecd1ff45-5fe3-5cf1-bc97-a362a67b9fe7"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-06",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "be3f5267-a0f0-531a-8872-d62578d67d2d",
+          "trace_id": "4a84c4c1-6599-51bb-a7dc-9c3acff72edc",
+          "span_id": "3b2f3bf4-d696-5483-9f7d-b5f5ec2fa8b6"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-07",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "41dad890-0429-56e5-a075-439956ef3716",
+          "trace_id": "c4555c43-8266-5309-a777-eb2d383687dd",
+          "span_id": "f104e090-af90-5dbe-9eaf-166ed2935bb0"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-08",
+      "role": "triage",
+      "statement": "The application validator flagged a draft check.",
+      "evidence": [
+        {
+          "event_id": "89551c2e-84fc-5255-ad93-b49104932f5e",
+          "trace_id": "8889db83-71dc-5b65-ab3f-3a8461cfa0c0",
+          "span_id": "0e37746e-bef7-5122-8562-9a9ba80d8b33"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-08",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "89551c2e-84fc-5255-ad93-b49104932f5e",
+          "trace_id": "8889db83-71dc-5b65-ab3f-3a8461cfa0c0",
+          "span_id": "0e37746e-bef7-5122-8562-9a9ba80d8b33"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-09",
+      "role": "triage",
+      "statement": "The application reported schema_valid=false.",
+      "evidence": [
+        {
+          "event_id": "8203d95e-dd61-5dac-b565-ba27d1896c12",
+          "trace_id": "a71e33cd-1101-5933-a2cf-c2dd8fabc53f",
+          "span_id": "bd09c09e-c70b-5de4-bddd-5a1708b949dd"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-09",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "8203d95e-dd61-5dac-b565-ba27d1896c12",
+          "trace_id": "a71e33cd-1101-5933-a2cf-c2dd8fabc53f",
+          "span_id": "bd09c09e-c70b-5de4-bddd-5a1708b949dd"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-10",
+      "role": "triage",
+      "statement": "Retry count exceeded the configured maximum of 2.",
+      "evidence": [
+        {
+          "event_id": "466344a6-d20f-5ccf-92ab-b2346a3195ca",
+          "trace_id": "0061b1bd-27c9-5679-ae30-dc6863105f49",
+          "span_id": "2f730900-e8aa-52be-931a-654c464b8f09"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-11",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "2c8b761f-8120-54c1-ba86-eecf4803245f",
+          "trace_id": "77e21039-676f-5359-85fd-fd44c108ae1b",
+          "span_id": "1299d41a-c213-5cfe-8225-1ae706f9cf9e"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-12",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "2ff73688-41c1-5719-95c2-395ff81effd3",
+          "trace_id": "8ad7dc83-ef5b-5b39-8195-b9d869c843b1",
+          "span_id": "a8017597-3f5f-57c1-aecc-146729cf89af"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-13",
+      "role": "triage",
+      "statement": "The application validator flagged a draft check.",
+      "evidence": [
+        {
+          "event_id": "a91cc94b-a7bc-5647-987d-92cf64315d8e",
+          "trace_id": "285f9452-09d7-56c7-a802-a97ba0507165",
+          "span_id": "8ef55167-2477-5f7d-b753-7823ff2e2429"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-13",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "a91cc94b-a7bc-5647-987d-92cf64315d8e",
+          "trace_id": "285f9452-09d7-56c7-a802-a97ba0507165",
+          "span_id": "8ef55167-2477-5f7d-b753-7823ff2e2429"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-14",
+      "role": "triage",
+      "statement": "The application reported schema_valid=false.",
+      "evidence": [
+        {
+          "event_id": "13905b3a-3966-54ee-a9dc-ff51a47ae431",
+          "trace_id": "8d250b73-d79a-5c90-81d8-b7e12c125de1",
+          "span_id": "efa5df04-5c93-52d8-b38c-535a0fd69be2"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-14",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "13905b3a-3966-54ee-a9dc-ff51a47ae431",
+          "trace_id": "8d250b73-d79a-5c90-81d8-b7e12c125de1",
+          "span_id": "efa5df04-5c93-52d8-b38c-535a0fd69be2"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-15",
+      "role": "triage",
+      "statement": "Retry count exceeded the configured maximum of 2.",
+      "evidence": [
+        {
+          "event_id": "250711a9-852f-5335-855e-b73d402c67d1",
+          "trace_id": "299f0fc5-f88f-57cc-bc68-6075a0039816",
+          "span_id": "8ec4db73-9c0b-5fd3-9d32-63f8a557af3b"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-16",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "53bf6c6e-74c5-5173-8369-354e03991c94",
+          "trace_id": "8211dde1-aaf0-53c8-8047-265aa6b60224",
+          "span_id": "030dcd28-249c-5768-b8ec-9846ece00a4f"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-17",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "8ed70977-0471-568b-a65a-4272f011f15f",
+          "trace_id": "53215360-d6f5-5fa3-8a36-0cf0eee0ce06",
+          "span_id": "5582e330-6a4b-51a6-be0b-228dd7e20ac5"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-18",
+      "role": "triage",
+      "statement": "The application validator flagged a draft check.",
+      "evidence": [
+        {
+          "event_id": "e6b0ff73-7f0d-5a2f-8aaf-a310f7f87212",
+          "trace_id": "2d00e5c3-1996-5ba8-a60a-e11277de55c2",
+          "span_id": "24fb2981-e461-5ba5-b653-ffbfc72e0cbc"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-18",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "e6b0ff73-7f0d-5a2f-8aaf-a310f7f87212",
+          "trace_id": "2d00e5c3-1996-5ba8-a60a-e11277de55c2",
+          "span_id": "24fb2981-e461-5ba5-b653-ffbfc72e0cbc"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-19",
+      "role": "triage",
+      "statement": "The application reported schema_valid=false.",
+      "evidence": [
+        {
+          "event_id": "5c914a39-44a9-546f-bf22-bc5a6525db7c",
+          "trace_id": "c9a74969-ab8f-5382-a303-804b91fe07b5",
+          "span_id": "c2a4adbd-010b-529b-9a59-00b8ce77d5cb"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "mailmate-19",
+      "role": "security_policy",
+      "statement": "The recorded validation signal warrants policy review. A security breach remains unverified.",
+      "evidence": [
+        {
+          "event_id": "5c914a39-44a9-546f-bf22-bc5a6525db7c",
+          "trace_id": "c9a74969-ab8f-5382-a303-804b91fe07b5",
+          "span_id": "c2a4adbd-010b-529b-9a59-00b8ce77d5cb"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-01",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "4991f2ad-aae3-55b5-a6d4-a7e0ff28994e",
+          "trace_id": "c281d92d-e9ae-5092-b821-d6ba1419533b",
+          "span_id": "323fe5a3-8895-5f7c-b708-55ee9d5d4ec0"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-01",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "4991f2ad-aae3-55b5-a6d4-a7e0ff28994e",
+          "trace_id": "c281d92d-e9ae-5092-b821-d6ba1419533b",
+          "span_id": "323fe5a3-8895-5f7c-b708-55ee9d5d4ec0"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-02",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "76d6b89b-a36a-5fa5-9de9-8d9678092391",
+          "trace_id": "5d9102d7-2257-54cd-8aa1-ed8fb3d08bd7",
+          "span_id": "ce5fb8de-9367-5ddb-a386-17dca0a26bec"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-02",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "76d6b89b-a36a-5fa5-9de9-8d9678092391",
+          "trace_id": "5d9102d7-2257-54cd-8aa1-ed8fb3d08bd7",
+          "span_id": "ce5fb8de-9367-5ddb-a386-17dca0a26bec"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-04",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "e6bcfbd3-8650-5c88-ac55-a8b56861f015",
+          "trace_id": "b1f2dbbc-5ceb-50a7-b2c9-6af955806680",
+          "span_id": "cf3b323a-21c7-5b65-a340-559b6d4043e2"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-04",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "e6bcfbd3-8650-5c88-ac55-a8b56861f015",
+          "trace_id": "b1f2dbbc-5ceb-50a7-b2c9-6af955806680",
+          "span_id": "cf3b323a-21c7-5b65-a340-559b6d4043e2"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-05",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "4f5c73e5-2da6-559c-835b-6c99133e8271",
+          "trace_id": "9e16062a-ccab-51ac-8f28-c6f2e6d1313b",
+          "span_id": "2ab715a0-5cca-546e-ad08-b0934dba4583"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-05",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "4f5c73e5-2da6-559c-835b-6c99133e8271",
+          "trace_id": "9e16062a-ccab-51ac-8f28-c6f2e6d1313b",
+          "span_id": "2ab715a0-5cca-546e-ad08-b0934dba4583"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-07",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "0b8ba7f7-d7f4-5e75-9525-0df8e11d3a3a",
+          "trace_id": "2878e5af-6d9d-5234-b6d6-b613447f150b",
+          "span_id": "e68f6067-a373-561c-ab60-046c11bd504c"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-07",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "0b8ba7f7-d7f4-5e75-9525-0df8e11d3a3a",
+          "trace_id": "2878e5af-6d9d-5234-b6d6-b613447f150b",
+          "span_id": "e68f6067-a373-561c-ab60-046c11bd504c"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-08",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "a1106357-1ebd-5aa2-9763-8bcc4094ea9f",
+          "trace_id": "c68553cb-e7ca-5761-a77e-ea4a91fe5311",
+          "span_id": "2c14b422-4544-5d6c-a98d-74ff9a469f16"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-08",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "a1106357-1ebd-5aa2-9763-8bcc4094ea9f",
+          "trace_id": "c68553cb-e7ca-5761-a77e-ea4a91fe5311",
+          "span_id": "2c14b422-4544-5d6c-a98d-74ff9a469f16"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-10",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "182eaf2b-9be6-5082-abb9-0241fa19774b",
+          "trace_id": "8d9dcea4-34d3-5af6-91b5-e8ab5659eff8",
+          "span_id": "54878064-4f0e-581d-bc0d-27a508739fb0"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-10",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "182eaf2b-9be6-5082-abb9-0241fa19774b",
+          "trace_id": "8d9dcea4-34d3-5af6-91b5-e8ab5659eff8",
+          "span_id": "54878064-4f0e-581d-bc0d-27a508739fb0"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-11",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "142a7f21-8682-5255-9501-8af259029913",
+          "trace_id": "229a0598-de90-5f3a-ba4f-a87221daef97",
+          "span_id": "0ef7f9de-2e62-524f-9608-397f64a90f75"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-11",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "142a7f21-8682-5255-9501-8af259029913",
+          "trace_id": "229a0598-de90-5f3a-ba4f-a87221daef97",
+          "span_id": "0ef7f9de-2e62-524f-9608-397f64a90f75"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-13",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "107a6bea-1fbe-5677-bc16-5e6695a4e073",
+          "trace_id": "7428a243-8275-5dff-afb3-707bbd409929",
+          "span_id": "313621d9-e3e9-51f1-b174-4316c1f7c821"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-13",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "107a6bea-1fbe-5677-bc16-5e6695a4e073",
+          "trace_id": "7428a243-8275-5dff-afb3-707bbd409929",
+          "span_id": "313621d9-e3e9-51f1-b174-4316c1f7c821"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-14",
+      "role": "triage",
+      "statement": "The application reported error status.",
+      "evidence": [
+        {
+          "event_id": "7157d369-ba18-5b44-b0b1-d6fbf6468843",
+          "trace_id": "04403fa8-aa36-5465-8e09-def39a7f88bc",
+          "span_id": "de1e794e-599a-5d3e-9416-0038e6769046"
+        }
+      ],
+      "supported": true
+    },
+    {
+      "case": "policy-14",
+      "role": "security_policy",
+      "statement": "The application reported blocking a restricted action. Its downstream outcome is unknown.",
+      "evidence": [
+        {
+          "event_id": "7157d369-ba18-5b44-b0b1-d6fbf6468843",
+          "trace_id": "04403fa8-aa36-5465-8e09-def39a7f88bc",
+          "span_id": "de1e794e-599a-5d3e-9416-0038e6769046"
+        }
+      ],
+      "supported": true
+    }
+  ]
+}

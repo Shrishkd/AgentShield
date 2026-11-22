@@ -1,5 +1,7 @@
 # AgentShield
 
+**Week 8 adds a reproducible 100-case benchmark, local Compose package and CI checks.** Start the core services, reproduce the investigation comparison or watch the dashboard demo. [Week 8 runbook and results](docs/week8.md)
+
 **Week 7 adds MailMate and a read-only fleet dashboard.** Run all three application integrations against one collector and inspect a mocked Gmail draft failure. [Week 7 runbook](docs/week7.md)
 
 **Week 6 adds repair proposals, isolated fixture replay and human review.** Open an investigation to prepare a proposed configuration change, compare baseline and candidate outcomes, and record a decision. The [Week 6 runbook](docs/week6.md) covers the interactive demo, replay boundaries and API.

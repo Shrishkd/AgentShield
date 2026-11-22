@@ -1,0 +1,17 @@
+**
+!Dockerfile
+!requirements.txt
+!backend/
+!backend/**/*.py
+!backend/replay/
+!backend/replay/*.json
+!backend/replay/*.wat
+!sdk/
+!sdk/pyproject.toml
+!sdk/agentshield/
+!sdk/agentshield/*.py
+!frontend/
+!frontend/package*.json
+!frontend/*.jsx
+!frontend/*.css
+!frontend/index.html
