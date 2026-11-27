@@ -73,3 +73,18 @@ The ordinary app's model choice, corpus, guards, response cache and checkpoint b
 - Citation attributes record whether the answer cites anything and whether cited IDs resolve. They do not score semantic support. The current graph omits reranking, so the hook records a span only when a real reranker executes.
 - Prompts, retrieved texts, answers, session IDs and exception messages stay outside AgentShield. The verifier exercises actual app code on a small corpus and local model. It does not measure textbook answer quality or production throughput.
 - The adapter targets the inspected synchronous node-factory API. Run the opt-in test when updating the RAG checkout. The normal collector suite skips that test unless `RAG_ROOT` is set. Clear `PYTHONPATH` and `RAG_ROOT` in a separate shell when running collector-only tests.
+## Remember the RAG application key on Windows
+
+Application registration persists in the collector's SQLite database. The server stores a digest and returns the original secret once. From the AgentShield directory, save the existing key once with a masked prompt. The default port below corresponds to the dedicated RAG collector on 8766.
+
+```powershell
+.\scripts\rag-key.ps1 Save
+```
+
+In each new RAG PowerShell terminal, run the following before starting the adapter. It sets the app ID, key and collector URL in that terminal and its child processes.
+
+```powershell
+& 'D:\PROJECTS\AgentShield\scripts\rag-key.ps1' Load
+```
+
+For dashboard login, run `.\scripts\rag-key.ps1 Copy` from AgentShield and paste into **Application key**. Add `-Port 8765` to each command if that is your collector port. The helper stores a Windows DPAPI-encrypted credential under `%LOCALAPPDATA%\AgentShield\keys`, scoped to the Windows user and machine. Reuse the same database when restarting the collector. If you replace the database or change its registration, save the corresponding key again.
