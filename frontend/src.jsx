@@ -116,20 +116,69 @@ function Incidents({token, fleet=false}) {
     </section></div></>;
 }
 
+const icons = {
+  shield: ['M12 2 21 6v6c0 5-5 8-9 10-4-2-9-5-9-10V6z','m8 12 3 3 5-6'],
+  grid: ['M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z'],
+  runs: ['M2 12h5l3-8 4 16 3-8h5'],
+  incident: ['m12 3 10 18H2z','M12 9v4 M12 16v1'],
+  lock: ['M5 10h14v11H5z','M8 10V7a4 4 0 0 1 8 0v3'],
+  layers: ['m2 7 10-5 10 5-10 5z','m2 12 10 5 10-5 M2 17l10 5 10-5'],
+  key: ['M14 14a6 6 0 1 0-4-4L3 17v4h4v-3h3z'],
+  eye: ['M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z','M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0'],
+  hidden: ['m3 3 18 18','M4 8l-2 4s4 7 10 7c2 0 3-.4 5-1.5 M9 5.5c6-2 11 3 13 6.5l-2 3'],
+  arrow: ['M4 12h15m-6-6 6 6-6 6'],
+  menu: ['M3 6h18 M3 12h18 M3 18h18']
+};
+function Icon({name,size=18}) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[name].map(d=><path key={d} d={d}/>)}</svg>;
+}
+
+function AccessPanel({fleet,setFleet,connect}) {
+  const [shown,show] = useState(false);
+  const [pending,busy] = useState(false);
+  const [error,report] = useState('');
+  async function submit(e) {
+    e.preventDefault();
+    const key=e.currentTarget.elements.key.value.trim();
+    if (!key) {report('Enter an access key to continue.');return;}
+    busy(true);
+    report('');
+    try {
+      const response=await fetch(fleet?'/v1/fleet/apps':'/v1/runs?limit=1', {headers:{Authorization:'Bearer '+key},cache:'no-store'});
+      if (!response.ok) throw Error([401,403].includes(response.status)?'Key rejected. Check your key and selected access mode.':'Connection failed ('+response.status+'). Try again.');
+      await response.json();
+      connect(key);
+    } catch (err) {report(err instanceof TypeError || err instanceof SyntaxError?'Unable to reach the AgentShield API. Check your connection and try again.':err.message);}
+    finally {busy(false);}
+  }
+  return <div className="access-layout"><form className="access-form" onSubmit={submit}>
+    <h2>Connect to workspace</h2>
+    <fieldset disabled={pending}><legend>Access mode</legend><div className="mode-options">{['Application','Fleet viewer'].map((name,i)=><label key={name} className={'mode '+(fleet===Boolean(i)?'selected':'')}>
+      <input type="radio" name="mode" checked={fleet===Boolean(i)} onChange={()=>{setFleet(Boolean(i));report('');}}/>
+      <Icon name={i?'layers':'grid'}/><span>{name}</span><i aria-hidden="true"/></label>)}</div></fieldset>
+    <label htmlFor="access-key">{fleet?'Fleet viewer key':'Application key'}</label><div className="key-field"><Icon name="key"/><input id="access-key" name="key" type={shown?'text':'password'} placeholder="Enter your access key" required autoComplete="off" disabled={pending} onChange={()=>report('')}/><button type="button" aria-label={shown?'Hide key':'Show key'} onClick={()=>show(!shown)}><Icon name={shown?'hidden':'eye'}/></button></div>
+    {error && <p role="alert">{error}</p>}
+    <button className="primary" disabled={pending}>{pending?'Connecting…':'Connect to workspace'}<Icon name="arrow"/></button>
+    <p className="memory"><Icon name="lock" size={15}/>Your key stays in memory until you disconnect or reload.</p>
+  </form><aside className="access-info"><div className="blueprint" aria-hidden="true"><div className="orbit outer"/><div className="orbit inner"/><div className="axis horizontal"/><div className="axis vertical"/><div className="beacon"><Icon name="shield" size={58}/></div><i className="node n1"/><i className="node n2"/><i className="node n3"/></div>
+    <div className="info-copy"><h2>Workspace access</h2><h3><Icon name="runs"/>Application</h3><p>Explore runs, inspect span timelines, and investigate incidents for one application.</p><h3><Icon name="layers"/>Fleet viewer</h3><p>Review incidents across applications with read-only fleet access.</p></div></aside></div>;
+}
 function App() {
   const [token, connect] = useState('');
   const [view, setView] = useState('Runs');
   const [fleet, setFleet] = useState(false);
-  return <><header><span className="mark" aria-hidden="true">A</span> AgentShield</header><main>
-    <h1>{fleet?'Fleet incidents':view==='Runs'?'Run explorer':'Incident explorer'}</h1>{token ? <><button className="disconnect" onClick={()=>{connect('');setView('Runs');}}>Disconnect</button>
-      {!fleet && <nav className="sections" aria-label="Explorer">{['Runs','Incidents'].map(name=>
-        <button key={name} aria-pressed={view===name} onClick={()=>setView(name)}>{name}</button>)}</nav>}
-      {!fleet && view==='Runs'?<Workspace token={token}/>:<Incidents token={token} fleet={fleet}/>}</> :
-      <form onSubmit={e=>{e.preventDefault(); connect(e.currentTarget.elements.key.value.trim());}}>
-        <label>Access <select value={fleet?'fleet':'app'} onChange={e=>setFleet(e.target.value==='fleet')}>
-          <option value="app">Application</option><option value="fleet">Read-only fleet</option></select></label>
-        <label>{fleet?'Fleet viewer key':'Application key'}<input type="password" name="key" autoComplete="off" required/></label>
-        <button className="primary">Connect</button><p>The key stays in memory until you disconnect or reload.</p></form>}</main></>;
+  const [menu,setMenu] = useState(false);
+  const title=!token?'Workspace connection':fleet?'Fleet incidents':view==='Runs'?'Run explorer':'Incident explorer';
+  const links=[['Connection','key'],['Runs','runs'],['Incidents','incident']];
+  return <div className="shell"><aside className={'sidebar '+(menu?'expanded':'')}><div className="brand"><span><Icon name="shield" size={23}/></span>AgentShield<button className="mobile-menu" aria-label="Toggle navigation" aria-expanded={menu} onClick={()=>setMenu(!menu)}><Icon name="menu"/></button></div>
+    <nav aria-label="Workspace navigation"><h3>Workspace</h3>{links.map(([name,icon])=>{
+      const current=token?(fleet?'Incidents':view)===name:name==='Connection';
+      const disabled=name==='Connection'?Boolean(token):!token || (fleet && name==='Runs');
+      return <button key={name} disabled={disabled} aria-current={current?'page':undefined} onClick={()=>{if(name!=='Connection')setView(name);setMenu(false);}}><Icon name={icon}/>{name}{disabled && <Icon name="lock" size={13}/>}</button>;
+    })}</nav><div className="side-foot"><Icon name="shield" size={15}/>AgentShield Console</div></aside>
+    <div className="content"><header className="topbar"><div><Icon name="grid" size={15}/>Workspace <span>/</span> <b>{token?title:'Connection'}</b></div><span className={'connection '+(token?'online':'')}><i/>{token?'Connected':'Disconnected'}</span></header>
+    <main><div className="page-heading"><div><h1>{title}</h1><p>{!token?'Connect your workspace to explore agent activity and investigate incidents.':view==='Runs'&&!fleet?'Inspect run activity and the events behind each trace.':'Review incidents and inspect their supporting evidence.'}</p></div>
+    {token && <button onClick={()=>{connect('');setView('Runs');}}>Disconnect</button>}</div>
+    {!token?<AccessPanel fleet={fleet} setFleet={setFleet} connect={connect}/>:!fleet && view==='Runs'?<Workspace token={token}/>:<Incidents token={token} fleet={fleet}/>}</main></div></div>;
 }
-
 createRoot(document.getElementById('root')).render(<App/>);

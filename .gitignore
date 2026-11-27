@@ -8,3 +8,5 @@ build/
 node_modules/
 frontend/dist/
 ReportPrompt.txt
+PROJECT_ANALYSIS.md
+project-documentation/
